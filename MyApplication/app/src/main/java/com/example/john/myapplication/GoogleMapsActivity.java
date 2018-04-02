@@ -93,6 +93,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private static CountDownTimer countDownTimer;// distance en m minimum du lieu pour commencer le jeu
     private boolean LocalisationDisponible;// Permet de savoir si la localisation est disponible
     private static Place[] placeTab;
+    private static Toolbar mToolbar;
     private static TextView countDownText;
 
 
@@ -116,7 +117,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         @Override
         public void run() {
             try {
-
                 //mis à jour niveau de batterie
                 batteryStatus = ctx.registerReceiver(null, ifilter);
 
@@ -128,6 +128,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
                 MyLatLng = new LatLng(Mylocation.getLatitude(), Mylocation.getLongitude());
                 if(directDistance(MyLatLng,currentPlace.latLng)< rayonPlace) {
+                    Toast.makeText(ctx, "Perdu !",
+                            Toast.LENGTH_LONG).show();
+                    sleep(2000);
                     Intent i = new Intent(GoogleMapsActivity.this, PlaceGameQuestionActivity.class);
                     currentPlayer.addToScore(currentPlace.nbPoint);
                     i.putExtra("currentPlace", currentPlace);
@@ -201,11 +204,15 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryStatus = ctx.registerReceiver(null, ifilter);
 
+        mToolbar = (Toolbar) findViewById(R.id.toolbarMap);
+        setSupportActionBar(mToolbar);
+
+
         currentPlayer = new Player("Jo",100);
         Place p1 = new Place("Station Université Montreal",new LatLng(45.50273312,-73.61833595),50);
         Place p2 = new Place("Station CDN",new LatLng(45.49629896,-73.62246992),100);
         placeTab = new Place[]{p1,p2};
-        currentPlace = placeTab[0];
+        currentPlace = placeTab[1];
 
         //Initialisation pour la carte GoogleMap
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -254,6 +261,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                                 initLocation();
                             }
                             stopRepeatingTask();
+                            changePlace();
                             startRepeatingTask();
                         }
                         else{
@@ -268,10 +276,10 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         initLocation();
         mHandler = new Handler();
-        changePlace();
         // Démarrage de la tâche
 
         startRepeatingTask();
+        changePlace();
 
     }
 
@@ -397,41 +405,13 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         } else {
 
         }
-        mMap.setOnInfoWindowClickListener(this);
-        CustomInfoWindow customInfoWindow = new CustomInfoWindow(this);
-        mMap.setInfoWindowAdapter(customInfoWindow);
+        //mMap.setOnInfoWindowClickListener(this);
+        //CustomInfoWindow customInfoWindow = new CustomInfoWindow(this);
+        //mMap.setInfoWindowAdapter(customInfoWindow);
 
 
     }
 
-    /**
-     * Scan  Wifi et récupération des résultats
-     */
-    public void detectWifi() {
-        this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        this.wifiManager.startScan();
-        this.wifiList = this.wifiManager.getScanResults();
-
-    }
-
-
-    /**
-     * Mets à jour le HashMap, élimine les doublons du scan
-     * On retient pour chaque réseau le RSSI le plus grand (meilleure connectivité)
-     */
-    public void updateWifiMap() {
-        wifiMap.clear();
-        for (ScanResult s : wifiList) {
-            String SSIDscan = s.SSID;
-            if (wifiMap.containsKey(SSIDscan)) {
-                if(s.level > wifiMap.get(SSIDscan).level){
-                    wifiMap.put(SSIDscan,s);
-                }
-            } else {
-                wifiMap.put(SSIDscan,s);
-            }
-        }
-    }
 
     /**
      * Gestion de la tâche à effectuer
@@ -469,12 +449,15 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     //start timer function
     void startTimer() {
+        if(!LocalisationDisponible){
+            return;
+        }
         countDownTimer = new CountDownTimer(TimeOnRoad(MyLatLng.latitude,MyLatLng.longitude,currentPlace.latLng.latitude,currentPlace.latLng.latitude), 1000) {
             public void onTick(long millisUntilFinished) {
                 int minutes = (int) millisUntilFinished / (60 * 1000);
                 int seconds = (int) (millisUntilFinished / 1000) % 60;
                 String time = String.format("%d:%02d", minutes, seconds);
-                countDownText.setText(time);
+                getSupportActionBar().setTitle(time);
             }
             public void onFinish() {
                 Toast.makeText(ctx, "Perdu !",
@@ -511,7 +494,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     private int TimeOnRoad(double oriLatitude, double oriLongitude,
                                      double destLatitude, double destLongitude) {
-        String result_in_kms = "";
+        /* result_in_kms = "";
         String urls = "http://maps.google.com/maps/api/directions/xml?origin="
                 + oriLatitude + "," + oriLongitude + "&destination=" + destLatitude
                 + "," + destLongitude + "&sensor=false&units=metric";
@@ -521,38 +504,34 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
 
-// read the response
             System.out.println("Response Code: " + conn.getResponseCode());
             InputStream in = new BufferedInputStream(conn.getInputStream());
             String res = org.apache.commons.io.IOUtils.toString(in, "UTF-8");
             System.out.println(res);
-            /*
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpContext localContext = new BasicHttpContext();
-            HttpPost httpPost = new HttpPost(url);
-            response = httpClient.execute(httpPost, localContext);
-            InputStream is = response.getEntity().getContent();*/
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder();
-            org.w3c.dom.Document doc = builder.parse(res);
-            if (doc != null) {
-                NodeList nl;
-                ArrayList args = new ArrayList();
-                for (String s : tag) {
-                    nl = doc.getElementsByTagName(s);
-                    if (nl.getLength() > 0) {
-                        Node node = nl.item(nl.getLength() - 1);
-                        args.add(node.getTextContent());
-                    } else {
-                        args.add(" - ");
-                    }
-                }
-                result_in_kms = String.format("%s", args.get(0));
+                 JSONObject jsonObject = new JSONObject();
+            try {
+
+                jsonObject = new JSONObject(stringBuilder.toString());
+
+                JSONArray array = jsonObject.getJSONArray("routes");
+
+                JSONObject routes = array.getJSONObject(0);
+
+                JSONArray legs = routes.getJSONArray("legs");
+
+                JSONObject steps = legs.getJSONObject(0);
+
+                JSONObject distance = steps.getJSONObject("distance");
+
+                Log.i("Distance", distance.toString());
+                dist = Double.parseDouble(distance.getString("text").replaceAll("[^\\.0123456789]","") );
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Integer.parseInt(result_in_kms)/vitesseMarche;
+            */
+        //return Integer.parseInt(result_in_kms)/vitesseMarche;
+        return 100000;
     }
 
     }

@@ -48,6 +48,8 @@
         <activity android:name=".PlaceGameAnswerActivity" />
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".ConnectionActivity"></activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignUpActivity"></activity>
     </application>
 
 </manifest>

@@ -75,7 +75,7 @@
         android:textColor="#000000"
         android:textSize="25.0sp" />
     <Button
-        android:id="@+id/btnuntime"
+        android:id="@+id/Inscription"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
