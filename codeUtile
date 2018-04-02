@@ -1,0 +1,67 @@
+ LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Criteria critere = new Criteria();
+// Pour indiquer la précision voulue
+// On peut mettre ACCURACY_FINE pour une haute précision ou ACCURACY_COARSE pour une moins bonne précision
+        critere.setAccuracy(Criteria.ACCURACY_FINE);
+// Est-ce que le fournisseur doit être capable de donner une altitude ?
+        critere.setAltitudeRequired(false);
+// Est-ce que le fournisseur doit être capable de donner une direction ?
+        critere.setBearingRequired(false);
+// Est-ce que le fournisseur peut être payant ?
+        critere.setCostAllowed(false);
+// Pour indiquer la consommation d'énergie demandée
+// Criteria.POWER_HIGH pour une haute consommation, Criteria.POWER_MEDIUM pour une consommation moyenne et Criteria.POWER_LOW pour une basse consommation
+        critere.setPowerRequirement(Criteria.POWER_HIGH);
+// Est-ce que le fournisseur doit être capable de donner une vitesse ?
+        critere.setSpeedRequired(false);
+        String provider =  locationManager.getBestProvider(critere,true);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120000, 150, new LocationListener() {
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+        }
+
+            @Override
+            public void onLocationChanged(Location location) {
+            }
+        });
+        // Add a marker in Sydney and move the camera
+        Location location = locationManager
+                .getLastKnownLocation(provider);
+        if(location==null){
+            return;
+        }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////::
+In functionGoogleMap.setInfoWindowAdapter(Yourcustominfowindowadpater)
+
+ class Yourcustominfowindowadpater implements GoogleMap.InfoWindowAdapter {
+        private final View mymarkerview;
+
+        Yourcustominfowindowadpater() {
+            mymarkerview = getLayoutInflater()
+                    .inflate(R.layout.custominfowindow, null);
+        }
+
+        public View getInfoWindow(Marker marker) {
+            render(marker, mymarkerview);
+            return mymarkerview;
+        }
+
+        public View getInfoContents(Marker marker) {
+            return null;
+        }
+
+        private void render(Marker marker, View view) {
+            // Add the code to set the required values
+            // for each element in your custominfowindow layout file
+        }
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
