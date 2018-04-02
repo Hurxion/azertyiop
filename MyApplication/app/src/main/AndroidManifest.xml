@@ -46,7 +46,8 @@
             android:label="@string/title_activity_google_maps" />
         <activity android:name=".PlaceGameQuestionActivity" />
         <activity android:name=".PlaceGameAnswerActivity" />
-        <activity android:name=".MainMenuActivity"></activity>
+        <activity android:name=".MainMenuActivity" />
+        <activity android:name=".ConnectionActivity"></activity>
     </application>
 
 </manifest>

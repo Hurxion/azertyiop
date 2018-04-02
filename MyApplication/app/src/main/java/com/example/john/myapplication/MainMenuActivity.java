@@ -31,7 +31,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.connexion:
-                Intent i1 = new Intent(MainMenuActivity.this, GoogleMapsActivity.class);
+                Intent i1 = new Intent(MainMenuActivity.this, ConnectionActivity.class);
                 startActivity(i1);
                 finish();
                 break;
