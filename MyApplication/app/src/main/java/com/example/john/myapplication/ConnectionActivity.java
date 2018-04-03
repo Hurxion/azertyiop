@@ -1,8 +1,10 @@
 package com.example.john.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -14,7 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 
-public class ConnectionActivity extends AppCompatActivity {
+public class ConnectionActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "ConnectionActivity";
 
@@ -28,6 +30,9 @@ public class ConnectionActivity extends AppCompatActivity {
         Player player=new Player("Jordan",0);
         DatabaseReference myRef = database.getReference();
         myRef.child("users").child("Jordan").setValue(player); //Ecriture
+
+        Button rollDice = (Button) findViewById(R.id.rollDiceButton);
+        rollDice.setOnClickListener(this);
 
 
         DatabaseReference anotherOne= myRef.child("users").child("Jordan");
@@ -55,4 +60,18 @@ public class ConnectionActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.rollDiceButton:
+                Intent i = new Intent(ConnectionActivity.this, rollDiceActivity.class);
+                startActivity(i);
+                finish();
+                break;
+        }
+    }
+
+
 }

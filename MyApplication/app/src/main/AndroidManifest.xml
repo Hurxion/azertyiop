@@ -47,9 +47,10 @@
         <activity android:name=".PlaceGameQuestionActivity" />
         <activity android:name=".PlaceGameAnswerActivity" />
         <activity android:name=".MainMenuActivity" />
-        <activity android:name=".ConnectionActivity"></activity>
+        <activity android:name=".ConnectionActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".rollDiceActivity"></activity>
     </application>
 
 </manifest>
