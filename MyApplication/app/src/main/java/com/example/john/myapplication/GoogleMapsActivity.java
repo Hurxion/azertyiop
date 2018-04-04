@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.icu.text.IDNA;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.wifi.ScanResult;
@@ -95,6 +96,11 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private static Place[] placeTab;
     private static Toolbar mToolbar;
     private static TextView countDownText;
+    private static boolean countFinished;
+    private static TextView InfoText;
+    private static boolean cheatMode;
+    private static LatLng cheatposition;
+    private static Marker cheatMarker;
 
 
     // Getter and Setter pour mInterval
@@ -127,58 +133,25 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                 }
 
                 MyLatLng = new LatLng(Mylocation.getLatitude(), Mylocation.getLongitude());
+                if(countFinished){
+                    Intent i = new Intent(GoogleMapsActivity.this, CountDownFinishedActivity.class);
+                    currentPlayer.addToScore(-currentPlace.nbPoint);
+                    countFinished = false;
+                    i.putExtra("currentPlace", currentPlace);
+                    i.putExtra("currentPlayer", currentPlayer);
+                    startActivity(i);
+
+                }
                 if(directDistance(MyLatLng,currentPlace.latLng)< rayonPlace) {
-                    Toast.makeText(ctx, "Perdu !",
-                            Toast.LENGTH_LONG).show();
-                    sleep(2000);
                     Intent i = new Intent(GoogleMapsActivity.this, PlaceGameQuestionActivity.class);
                     currentPlayer.addToScore(currentPlace.nbPoint);
+                    countFinished = false;
+                    countDownTimer.cancel();
                     i.putExtra("currentPlace", currentPlace);
-                    i.putExtra("player", currentPlayer);
+                    i.putExtra("currentPlayer", currentPlayer);
                     startActivity(i);
-                    changePlace();
                 }
 
-         /*       //On retire tous les marqueurs de la carte
-                for (Marker m : markerList){
-                    m.remove();
-                }
-                markerList.clear();
-
-                //On remplit wifiList en scannant les réseaux Wifi
-                detectWifi();
-                //On Update wifiMap afin de n'avoir qu'un seul marqueur par réseau
-                updateWifiMap();
-                if (wifiList != null) {
-                    //On parcourt WifiMap pour créer les marqueurs
-                    for (ScanResult s : wifiMap.values()) {
-                        Random r = new Random();
-                        double randomValue = -rangeRandom + (rangeRandom - (-rangeRandom)) * r.nextDouble();
-                        Random r2 = new Random();
-                        double randomValue2 = -rangeRandom + (rangeRandom - (-rangeRandom)) * r2.nextDouble();
-                        if(!s.SSID.equals("")) {
-                            Marker m;
-                            WifiRouter wifi = new WifiRouter(s.SSID, s.BSSID, s.capabilities, calculateSignalLevel(s.level, 5));
-                            //Test de la sécurité pour savoir quel couleur associer au marqueur
-                            if(s.capabilities.toLowerCase().contains("WPA".toLowerCase()) || s.capabilities.toLowerCase().contains("WEP".toLowerCase())){
-                                 m = mMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(Mylocation.getLatitude() + randomValue, Mylocation.getLongitude() + randomValue2))
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                            }
-                            else{
-                                 m = mMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(Mylocation.getLatitude() + randomValue, Mylocation.getLongitude() + randomValue2))
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                            }
-                            // On associe l'objet WifiRouter au marker et on l'ajoute sur la carte
-                            m.setTag(wifi);
-                            markerList.add(m);
-
-                        }
-
-                        }
-
-                    }*/
 
 
             } finally {
@@ -200,15 +173,19 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         countDownText =  findViewById(R.id.countDownTimer);
+        InfoText =  findViewById(R.id.Info);
 
         ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryStatus = ctx.registerReceiver(null, ifilter);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbarMap);
+        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
 
+        cheatMode = true;
+        if(cheatMode){
+            cheatposition = new LatLng(45.50273312,-73.61833595);
+        }
 
-        currentPlayer = new Player("Jo",100);
         Place p1 = new Place("Station Université Montreal",new LatLng(45.50273312,-73.61833595),50);
         Place p2 = new Place("Station CDN",new LatLng(45.49629896,-73.62246992),100);
         placeTab = new Place[]{p1,p2};
@@ -223,10 +200,30 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
         batteryPctInitial = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
 
-    /*   markerList = new ArrayList<>();
-        wifiMap = new HashMap<String,ScanResult>();
 
-       ;*/
+        Bundle bundle = getIntent().getExtras();
+        currentPlayer = (Player) bundle.getSerializable("Player");
+
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(mHandler != null){
+           stopRepeatingTask();
+        }
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(mHandler != null) {
+            mHandler.removeCallbacks(mStatusChecker);
+            changePlace();
+            startRepeatingTask();
+        }
     }
 
 
@@ -270,16 +267,18 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                 });
             }
         });
+
+        mHandler = new Handler();
+
         if (!this.LocalisationDisponible) {
             alert.show();
         }
+        else{
+            initLocation();
+            startRepeatingTask();
+            changePlace();
+        }
 
-        initLocation();
-        mHandler = new Handler();
-        // Démarrage de la tâche
-
-        startRepeatingTask();
-        changePlace();
 
     }
 
@@ -330,6 +329,10 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                 // Found best last known location: %s", l);
                 bestLocation = l;
             }
+        }
+        if(cheatMode && bestLocation != null){
+            bestLocation.setLatitude(cheatposition.latitude);
+            bestLocation.setLongitude(cheatposition.longitude);
         }
         return bestLocation;
     }
@@ -405,6 +408,21 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         } else {
 
         }
+
+        if(cheatMode){
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng point) {
+                    if(cheatMarker != null){
+                        cheatMarker.remove();
+                    }
+                    cheatMarker = mMap.addMarker(new MarkerOptions()
+                            .position(point)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                    cheatposition = point;
+                }
+            });
+        }
         //mMap.setOnInfoWindowClickListener(this);
         //CustomInfoWindow customInfoWindow = new CustomInfoWindow(this);
         //mMap.setInfoWindowAdapter(customInfoWindow);
@@ -442,8 +460,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         mCircle = mMap.addCircle(circleOptions);
         currentPlace.marker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(currentPlace.latLng.latitude, currentPlace.latLng.longitude))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         startTimer();
+        InfoText.setText(currentPlayer.getName() + " : Objectif " + currentPlace.nom);
 
     }
 
@@ -452,18 +471,17 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         if(!LocalisationDisponible){
             return;
         }
+        countFinished = false;
         countDownTimer = new CountDownTimer(TimeOnRoad(MyLatLng.latitude,MyLatLng.longitude,currentPlace.latLng.latitude,currentPlace.latLng.latitude), 1000) {
             public void onTick(long millisUntilFinished) {
                 int minutes = (int) millisUntilFinished / (60 * 1000);
                 int seconds = (int) (millisUntilFinished / 1000) % 60;
                 String time = String.format("%d:%02d", minutes, seconds);
-                getSupportActionBar().setTitle(time);
+                countDownText.setText(time);
             }
             public void onFinish() {
-                Toast.makeText(ctx, "Perdu !",
-                        Toast.LENGTH_LONG).show();
-                changePlace();
-                startTimer();
+                countFinished = true;
+                countDownTimer.cancel();
             }
         };
        countDownTimer.start();
@@ -531,7 +549,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
             }
             */
         //return Integer.parseInt(result_in_kms)/vitesseMarche;
-        return 100000;
+        return 20000;
     }
 
     }

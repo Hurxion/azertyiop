@@ -1,6 +1,7 @@
 package com.example.john.myapplication;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,8 +11,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.security.MessageDigest;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import static java.lang.Thread.sleep;
 
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -31,20 +39,25 @@ public class SignUpActivity extends AppCompatActivity {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signup();
+                try {
+                    signup();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
     }
 
-    public void signup() {
+    public void signup() throws InterruptedException {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
@@ -57,14 +70,21 @@ public class SignUpActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
+        progressDialog.setMessage("En attente de création...");
         progressDialog.show();
 
         String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        // TODO: Implement your own signup logic here.
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        Player player = new Player(name,sha256(password),0);
+        DatabaseReference myRef = database.getReference();
+
+
+        myRef.child("users").child(player.getName()).setValue(player);
+
+
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -76,12 +96,16 @@ public class SignUpActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
+
+
     }
 
 
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
+        Intent i = new Intent(SignUpActivity.this, MainMenuActivity.class);
+        startActivity(i);
         finish();
     }
 
@@ -120,5 +144,23 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    public static String sha256(String base) {
+        try{
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuffer hexString = new StringBuffer();
+
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch(Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 }

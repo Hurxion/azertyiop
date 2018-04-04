@@ -44,11 +44,15 @@
         <activity
             android:name=".GoogleMapsActivity"
             android:label="@string/title_activity_google_maps" />
-        <activity android:name=".PlaceGameQuestionActivity" />
+        <activity
+            android:name=".PlaceGameQuestionActivity"
+            android:launchMode="singleInstance" />
         <activity android:name=".PlaceGameAnswerActivity" />
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".ConnectionActivity" />
         <activity android:name=".LoginActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".CountDownFinishedActivity"></activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".rollDiceActivity"></activity>
     </application>

@@ -14,8 +14,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.security.MessageDigest;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import static java.lang.Math.toIntExact;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -26,11 +36,19 @@ public class LoginActivity extends AppCompatActivity {
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
 
+    private static String dbPassword;
+    private static String dbName;
+    private static long dbScore;
+    private static boolean logged;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
+
+        logged = false;
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -46,7 +64,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -68,19 +87,64 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
 
         String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        final String password = _passwordText.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        DatabaseReference anotherOne = myRef.child("users").child(email);
+
+        // Read from the database
+        anotherOne.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                dbName =
+                dbPassword = dataSnapshot.child("password").getValue(String.class);
+                if(dbPassword == null){
+                    onLoginFailed();
+                    return;
+                }
+                else{
+                    if (dbPassword.equals(sha256(password))) {
+                        logged = true;
+                        dbName = dataSnapshot.child("name").getValue(String.class);
+                        dbScore = dataSnapshot.child("score").getValue(Long.class);
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                //Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
                         progressDialog.dismiss();
+                        _loginButton.setEnabled(true);
+                        if(logged){
+                            onLoginSuccess();
+                        }
+                        else{
+                            onLoginFailed();
+                        }
+
+
+
                     }
                 }, 3000);
+
+
     }
 
 
@@ -88,10 +152,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
+                 // By default we just finish the Activity and log them in automatically
             }
         }
     }
@@ -104,6 +165,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
+        Intent i = new Intent(LoginActivity.this, MainMenuActivity.class);
+        i.putExtra("logged", true);
+        i.putExtra("Player", new Player(dbName,dbPassword, toIntExact(dbScore)));
+        i.setType("text/plain");
+        startActivity(i);
         finish();
     }
 
@@ -119,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty()) {
             _emailText.setError("enter a valid email address");
             valid = false;
         } else {
@@ -134,5 +200,23 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    public static String sha256(String base) {
+        try{
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuffer hexString = new StringBuffer();
+
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch(Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 }

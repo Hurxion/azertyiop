@@ -11,8 +11,8 @@ import java.io.Serializable;
 
 public class Place implements Serializable {
     String nom;
-    LatLng latLng;
-    Marker marker;
+    transient LatLng latLng;
+    transient Marker  marker;
     int nbPoint;
 
     public Place(String n, LatLng l,int point){

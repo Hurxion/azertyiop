@@ -45,7 +45,7 @@
         app:navigationContentDescription="@string/abc_action_bar_up_description"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Wifi Scanner" />
+         />
 
     <TextView
         android:id="@+id/countDownTimer"
@@ -58,5 +58,17 @@
         android:layout_marginEnd="11dp"
         android:layout_marginRight="11dp"
         android:text="TextView" />
+
+    <TextView
+        android:id="@+id/Info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/map"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp"
+        android:layout_toLeftOf="@+id/countDownTimer"
+        android:layout_toStartOf="@+id/countDownTimer"
+        android:text="" />
 
 </RelativeLayout>

@@ -24,6 +24,8 @@ public class LauncherActivity extends Activity {
             @Override
             public void run() {
                 Intent i = new Intent(LauncherActivity.this, MainMenuActivity.class);
+                i.putExtra("logged", false);
+                i.setType("text/plain");
                 startActivity(i);
                 finish();
             }

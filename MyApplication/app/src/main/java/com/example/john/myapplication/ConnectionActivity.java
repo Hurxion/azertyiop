@@ -27,7 +27,7 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Player player=new Player("Jordan",0);
+        Player player = new Player("Jordan","assa",0);
         DatabaseReference myRef = database.getReference();
         myRef.child("users").child("Jordan").setValue(player); //Ecriture
 
@@ -35,7 +35,7 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
         rollDice.setOnClickListener(this);
 
 
-        DatabaseReference anotherOne= myRef.child("users").child("Jordan");
+        DatabaseReference anotherOne = myRef.child("users").child("Jordan");
 
         // Read from the database
         anotherOne.addValueEventListener(new ValueEventListener() {

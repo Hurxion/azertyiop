@@ -10,11 +10,9 @@ import android.widget.TextView;
 import java.util.List;
 
 public class PlaceGameQuestionActivity extends AppCompatActivity {
-
-    List<Question> quesList;
     TextView info;
     Question currentQ;
-    TextView txtQuestion, times, scored;
+    TextView txtQuestion, times;
     Button button1, button2, button3;
     Place currentPlace;
     Player currentPlayer;
@@ -23,11 +21,12 @@ public class PlaceGameQuestionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_place_game_answer);
+        setContentView(R.layout.activity_place_game_question);
 
         Intent i = getIntent();
-        currentPlace =(Place)i.getSerializableExtra("currentPlace");
-        currentPlayer =(Player)i.getSerializableExtra("currentPlayer");
+        currentPlace =(Place) i.getSerializableExtra("currentPlace");
+        currentPlayer =(Player) i.getSerializableExtra("currentPlayer");
+
         txtQuestion = (TextView) findViewById(R.id.txtQuestion);
         times = (TextView) findViewById(R.id.timers);
         times.setText("");
@@ -39,16 +38,13 @@ public class PlaceGameQuestionActivity extends AppCompatActivity {
         button3 = (Button) findViewById(R.id.button3);
 // the textview in which score will be displayed
         info = (TextView) findViewById(R.id.score);
-
+        currentQ = getQuestion();
 // method which will set the things up for our game
         setQuestionView();
 // button click listeners
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-// passing the button text to other method
-// to check whether the anser is correct or not
-// same for all three buttons
                 getAnswer(button1.getText().toString());
             }
         });
@@ -91,7 +87,12 @@ public class PlaceGameQuestionActivity extends AppCompatActivity {
         button1.setText(currentQ.getOPTA());
         button2.setText(currentQ.getOPTB());
         button3.setText(currentQ.getOPTC());
-        info.setText(currentPlayer.getName() + " à " + currentPlace.nom);
+        String s = currentPlayer.getName() + " à " + currentPlace.nom;
+        info.setText(s);
+    }
+
+    private Question getQuestion(){
+        return new Question();
     }
 }
 
