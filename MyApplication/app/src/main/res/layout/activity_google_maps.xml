@@ -23,13 +23,13 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/BleuClair"
+        android:background="@color/Noir"
         android:gravity="center"
         android:minHeight="?attr/actionBarSize"
         app:navigationContentDescription="@string/abc_action_bar_up_description"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Wifi Scanner" />
+        app:title="Tic-Tac-Go !" />
 
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -39,13 +39,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/my_toolbar"
-        android:background="@color/BleuClair"
+        android:background="@color/GrisFonce"
         android:gravity="center"
         android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AlertDialog.AppCompat.Light"
         app:navigationContentDescription="@string/abc_action_bar_up_description"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-         />
+        app:titleTextColor="@color/Blanc" />
 
     <TextView
         android:id="@+id/countDownTimer"
@@ -55,8 +56,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="20dp"
+        android:textColor="@color/Blanc"
         android:layout_marginEnd="11dp"
         android:layout_marginRight="11dp"
+        android:textStyle="bold"
         android:text="TextView" />
 
     <TextView
@@ -67,8 +70,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="20dp"
+        android:layout_marginLeft="11dp"
+        android:textColor="@color/Blanc"
         android:layout_toLeftOf="@+id/countDownTimer"
         android:layout_toStartOf="@+id/countDownTimer"
+        android:textStyle="bold"
         android:text="" />
 
 </RelativeLayout>

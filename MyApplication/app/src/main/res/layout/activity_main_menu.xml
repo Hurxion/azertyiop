@@ -14,6 +14,7 @@
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:inputType="textMultiLine"
+        android:theme="@style/buttonstyle"
         android:text="Menu"
         android:textColor="#ffffff"
         android:textSize="25.0sp"
@@ -26,12 +27,11 @@
         android:layout_gravity="center"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:layout_marginTop="15dp"
-        android:background="#fff"
+        android:layout_marginTop="25dp"
         android:gravity="center"
+        android:theme="@style/buttonstyle"
         android:text="Jouer"
-        android:textColor="#000000"
-        android:textSize="25.0sp" />
+       />
 
     <Button
         android:id="@+id/connexion"
@@ -40,12 +40,11 @@
         android:layout_gravity="center"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:layout_marginTop="5dp"
-        android:background="#fff"
+        android:layout_marginTop="15dp"
+        android:theme="@style/buttonstyle"
         android:gravity="center"
         android:text="Se connecter"
-        android:textColor="#000000"
-        android:textSize="25.0sp" />
+    />
 
     <Button
         android:id="@+id/scores"
@@ -54,12 +53,11 @@
         android:layout_gravity="center"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:layout_marginTop="5dp"
-        android:background="#fff"
+        android:layout_marginTop="15dp"
         android:gravity="center"
+        android:theme="@style/buttonstyle"
         android:text="Tableau des scores"
-        android:textColor="#000000"
-        android:textSize="25.0sp" />
+ />
 
     <Button
         android:id="@+id/Réglages"
@@ -68,12 +66,10 @@
         android:layout_gravity="center"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:layout_marginTop="5dp"
-        android:background="#fff"
+        android:layout_marginTop="15dp"
         android:gravity="center"
-        android:text="Réglages"
-        android:textColor="#000000"
-        android:textSize="25.0sp" />
+        android:theme="@style/buttonstyle"
+        android:text="Réglages" />
     <Button
         android:id="@+id/Inscription"
         android:layout_width="fill_parent"
@@ -81,12 +77,10 @@
         android:layout_gravity="center"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:layout_marginTop="5dp"
-        android:background="#fff"
-        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:theme="@style/buttonstyle"
         android:text="Inscription"
-        android:textColor="#000000"
-        android:textSize="25.0sp" />
+ />
 
     <TextView
         android:id="@+id/Info"
@@ -96,6 +90,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
         android:gravity="center"
+        android:theme="@style/buttonstyle"
         android:inputType="textMultiLine"
         android:text=""
         android:textColor="#ffffff"

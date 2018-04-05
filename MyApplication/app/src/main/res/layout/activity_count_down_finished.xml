@@ -26,8 +26,23 @@
         android:layout_marginTop="200dp"
         android:background="#000000"
         android:onClick="playagain"
+        android:theme="@style/buttonstyle"
         android:padding="20dp"
         android:text="Nouvelle Course"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/retour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="#000000"
+        android:onClick="retour"
+        android:padding="20dp"
+        android:theme="@style/buttonstyle"
+        android:text="Retour au menu"
         android:textColor="#ffffff"
         android:textSize="20sp" />
 </LinearLayout>

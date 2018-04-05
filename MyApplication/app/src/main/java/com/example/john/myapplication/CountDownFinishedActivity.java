@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import static java.lang.Math.toIntExact;
+
 /**
  * Created by acer on 06-Apr-16.
  */
@@ -41,6 +43,15 @@ public class CountDownFinishedActivity extends AppCompatActivity {
         intent.putExtra("Player",currentPlayer);
         intent.setType("text/plain");
         startActivity(intent);
+        finish();
+    }
+
+    public void retour(View o){
+        Intent i = new Intent(this, MainMenuActivity.class);
+        i.putExtra("logged", true);
+        i.putExtra("Player", currentPlayer);
+        i.setType("text/plain");
+        startActivity(i);
         finish();
     }
 }

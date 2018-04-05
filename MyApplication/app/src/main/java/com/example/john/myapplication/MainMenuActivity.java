@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import static java.lang.Thread.sleep;
+
 public class MainMenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static boolean logged;
@@ -21,6 +23,8 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         Button Scores = (Button) findViewById(R.id.scores);
         Button Reglages = (Button) findViewById(R.id.Réglages);
         Button Inscription  = (Button) findViewById(R.id.Inscription);
+
+
 
         TextView info  = (TextView) findViewById(R.id.Info);
 
@@ -43,6 +47,18 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         Scores.setOnClickListener(this);
         Reglages.setOnClickListener(this);
         Inscription.setOnClickListener(this);
+
+        //getQuestion();
+}
+
+public void getQuestion(){
+    Intent i = new Intent(MainMenuActivity.this, GetQuestion.class);
+    startActivity(i);
+    finish();
+    Bundle b = getIntent().getExtras();
+    Question q  = (Question) b.getSerializable("Question");
+
+
 }
     public void onClick(View v) {
 
@@ -60,7 +76,8 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.scores:
-                Intent i2 = new Intent(MainMenuActivity.this, rollDiceActivity.class);
+                //Intent i2 = new Intent(MainMenuActivity.this, rollDiceActivity.class);
+                Intent i2 = new Intent(MainMenuActivity.this, ConnectionActivity.class);
                 startActivity(i2);
                 finish();
                 break;

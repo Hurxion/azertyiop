@@ -5,6 +5,7 @@ package com.example.john.myapplication;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import android.content.Intent;
@@ -31,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    @InjectView(R.id.input_email) EditText _emailText;
+    @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
@@ -49,7 +50,22 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         logged = false;
+        // Toolbar permettant de revenir à l'activité précédente
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        myToolbar.setNavigationIcon(R.drawable.back18dp);
+
+        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, MainMenuActivity.class);
+                i.putExtra("logged", false);
+                i.setType("text/plain");
+                startActivity(i);
+                finish();
+            }
+        });
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -86,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = _emailText.getText().toString();
+        String email = _usernameText.getText().toString();
         final String password = _passwordText.getText().toString();
 
 
@@ -182,14 +198,15 @@ public class LoginActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String email = _emailText.getText().toString();
+
+        String username = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (email.isEmpty()) {
-            _emailText.setError("enter a valid email address");
+        if (username.isEmpty()) {
+            _usernameText.setError("enter a valid username address");
             valid = false;
         } else {
-            _emailText.setError(null);
+            _usernameText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {

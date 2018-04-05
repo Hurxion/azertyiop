@@ -48,4 +48,13 @@ import android.widget.TextView;
             startActivity(intent);
             finish();
         }
+
+        public void retour(View o){
+            Intent i = new Intent(this, MainMenuActivity.class);
+            i.putExtra("logged", true);
+            i.putExtra("Player", currentPlayer);
+            i.setType("text/plain");
+            startActivity(i);
+            finish();
+        }
     }

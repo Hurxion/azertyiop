@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static com.example.john.myapplication.Place.safeLongToInt;
 
 
 public class ConnectionActivity extends AppCompatActivity implements View.OnClickListener{
@@ -35,7 +36,7 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
         rollDice.setOnClickListener(this);
 
 
-        DatabaseReference anotherOne = myRef.child("users").child("Jordan");
+        DatabaseReference anotherOne = myRef;
 
         // Read from the database
         anotherOne.addValueEventListener(new ValueEventListener() {
@@ -43,12 +44,7 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.child("name").getValue(String.class);
-
-                //editText
-                System.out.println(value);
-                EditText widget = (EditText) findViewById(R.id.editText);
-                widget.setText(value.toString());
+               //widget.setText(value.toString());
 
                 //Log.d(TAG, "Value is: " + value);
             }

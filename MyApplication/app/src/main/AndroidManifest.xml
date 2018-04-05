@@ -10,7 +10,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/tictactoe"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -52,9 +52,9 @@
         <activity android:name=".ConnectionActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".CountDownFinishedActivity"></activity>
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".rollDiceActivity"></activity>
+        <activity android:name=".CountDownFinishedActivity" />
+        <activity android:name=".rollDiceActivity" />
+        <activity android:name=".GenerateDB" />
     </application>
 
 </manifest>

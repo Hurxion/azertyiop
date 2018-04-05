@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Wifi Scanner</string>
+    <string name="app_name">Tic-Tac-Go !</string>
     <string name="title_activity_google_map">GoogleMap</string>
     <string name="title_activity_google_maps">GoogleMap</string>
     <string name="title_activity_wifi_details">WifiDetails</string>
+    <string name="title_activity_get_question">GetQuestion</string>
 </resources>

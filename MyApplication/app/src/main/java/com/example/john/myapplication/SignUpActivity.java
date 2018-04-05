@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,6 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
     @InjectView(R.id.input_name) EditText _nameText;
-    @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_signup) Button _signupButton;
     @InjectView(R.id.link_login) TextView _loginLink;
@@ -44,6 +44,22 @@ public class SignUpActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        // Toolbar permettant de revenir à l'activité précédente
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        myToolbar.setNavigationIcon(R.drawable.back18dp);
+        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SignUpActivity.this, MainMenuActivity.class);
+                i.putExtra("logged", false);
+                i.setType("text/plain");
+                startActivity(i);
+                finish();
+
             }
         });
 
@@ -74,7 +90,6 @@ public class SignUpActivity extends AppCompatActivity {
         progressDialog.show();
 
         String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -119,7 +134,6 @@ public class SignUpActivity extends AppCompatActivity {
         boolean valid = true;
 
         String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
@@ -129,12 +143,7 @@ public class SignUpActivity extends AppCompatActivity {
             _nameText.setError(null);
         }
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
-            valid = false;
-        } else {
-            _emailText.setError(null);
-        }
+
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
             _passwordText.setError("between 4 and 10 alphanumeric characters");
