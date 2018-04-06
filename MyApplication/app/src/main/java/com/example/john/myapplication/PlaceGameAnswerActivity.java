@@ -10,21 +10,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.BoringLayout;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
     /**
      * Created by acer on 06-Apr-16.
      */
     public class PlaceGameAnswerActivity extends AppCompatActivity {
+
+        Player currentPlayer;
+
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_place_game_answer);
             TextView textResult = (TextView) findViewById(R.id.textResult);
+
+
             Bundle b = getIntent().getExtras();
             Boolean goodAnswer = b.getBoolean("goodAnswer");
             Place currentPlace = (Place) b.getSerializable("currentPlace");
-            Player currentPlayer = (Player) b.getSerializable("currentPlayer");
+            currentPlayer = (Player) b.getSerializable("currentPlayer");
             if(goodAnswer){
                 currentPlayer.addToScore(currentPlace.nbPoint);
                 textResult.setText("Bravo " + currentPlayer.getName() + " bonne réponse, tu obtiens " + currentPlace.nbPoint*2 + " points , ton score est maintenant de " + currentPlayer.getScore());
@@ -34,8 +41,22 @@ import android.widget.TextView;
             }
 
         }
+
+        //ONclick
         public void playagain(View o) {
             Intent intent = new Intent(this, GoogleMapsActivity.class);
+            intent.putExtra("Player",currentPlayer);
+            intent.setType("text/plain");
             startActivity(intent);
+            finish();
+        }
+
+        public void retour(View o){
+            Intent i = new Intent(this, MainMenuActivity.class);
+            i.putExtra("logged", true);
+            i.putExtra("Player", currentPlayer);
+            i.setType("text/plain");
+            startActivity(i);
+            finish();
         }
     }

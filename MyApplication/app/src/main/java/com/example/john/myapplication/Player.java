@@ -1,5 +1,8 @@
 package com.example.john.myapplication;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 
 /**
@@ -8,15 +11,30 @@ import java.io.Serializable;
 
 public class Player implements Serializable {
     private String name;
+    private String password;
     private int score;
 
-    public Player(String n,int s){
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Player(String n,String pass,int s){
         name = n;
         score = s;
+        password = pass;
     }
 
     public void addToScore(int p){
         score += p;
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.child("users").child(this.name).setValue(this); //Ecriture
+
     }
 
     public String getName() {

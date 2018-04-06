@@ -4,10 +4,11 @@
     <color name="BleuFonce">#2d2b97</color>
     <color name="colorToolBarText">#ffffff</color>
     <color name="colorTitleText">#3d4953</color>
-    <color name="colorButtonText">#282828</color>
-    <color name="colorText">#201e1e</color>
+    <color name="GrisFonce">#282828</color>
+    <color name="Noir">#201e1e</color>
     <color name="Orange">#d15400</color>
     <color name="GrisBleu">#2a3f4c</color>
+    <color name="Blanc">#ffffff</color>
 
 
 </resources>

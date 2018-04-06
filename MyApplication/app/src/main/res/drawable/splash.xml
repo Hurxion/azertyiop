@@ -1,11 +1,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <item android:drawable="@color/BleuClair" />
+    <item android:drawable="@color/Orange" />
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/tictactoe"/>
     </item>
 
 </layer-list>

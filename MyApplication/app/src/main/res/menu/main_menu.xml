@@ -2,17 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/favori"
+        android:id="@+id/Menu"
         android:orderInCategory="100"
         android:title="Favoris"
-        android:icon="@drawable/favorite"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/settings"
-        android:orderInCategory="200"
-        android:icon="@drawable/settings"
-        android:title="Settings"
+        android:icon="@drawable/ic_menu_white_24dp"
         app:showAsAction="always" />
 
 </menu>
