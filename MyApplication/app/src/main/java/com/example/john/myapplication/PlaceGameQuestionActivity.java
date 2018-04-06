@@ -103,6 +103,9 @@ public class PlaceGameQuestionActivity extends AppCompatActivity {
         button3.setText(currentQ.getOPTC());
         String s = currentPlayer.getName() + " à " + currentPlace.nom;
         info.setText(s);
+        button1.setEnabled(true);
+        button2.setEnabled(true);
+        button3.setEnabled(true);
     }
 
 

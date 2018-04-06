@@ -26,6 +26,8 @@ import android.widget.TextView;
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_place_game_answer);
             TextView textResult = (TextView) findViewById(R.id.textResult);
+
+
             Bundle b = getIntent().getExtras();
             Boolean goodAnswer = b.getBoolean("goodAnswer");
             Place currentPlace = (Place) b.getSerializable("currentPlace");

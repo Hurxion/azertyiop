@@ -178,6 +178,10 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                     startActivity(i);
                 }
 
+                if(opponentDetected()){
+                    startDuel();
+                }
+
 
             } finally {
 
@@ -375,15 +379,15 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.favori:
-                Intent sendIntent = new Intent(GoogleMapsActivity.this, FavoritesActivity.class);
-                startActivity(sendIntent);
+            case R.id.Menu:
+                Intent i = new Intent(GoogleMapsActivity.this, MainMenuActivity.class);
+                i.putExtra("logged", true);
+                i.putExtra("Player", currentPlayer);
+                i.setType("text/plain");
+                startActivity(i);
+                finish();
                 return true;
 
-            case R.id.settings:
-                Intent i = new Intent(GoogleMapsActivity.this, SettingsActivity.class);
-                startActivity(i);
-                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -462,6 +466,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     public void onDestroy() {
         super.onDestroy();
         stopRepeatingTask();
+        if(countDownTimer != null){
+            countDownTimer.cancel();
+        }
     }
 
     void startRepeatingTask() {
@@ -533,7 +540,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
             return;
         }
         countFinished = false;
-        countDownTimer = new CountDownTimer(TimeOnRoad(MyLatLng.latitude, MyLatLng.longitude, currentPlace.latLng.latitude, currentPlace.latLng.latitude)/1000, 1000) {
+        countDownTimer = new CountDownTimer(TimeOnRoad(MyLatLng.latitude, MyLatLng.longitude, currentPlace.latLng.latitude, currentPlace.latLng.longitude)*1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 int heures = (int) millisUntilFinished / (3600 * 1000);
                 int minutes = (int) millisUntilFinished / (60 * 1000) % 60;
@@ -615,6 +622,14 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         }
         return Integer.parseInt(duration);*/
         return (int)(3600*directDistance(new LatLng(oriLatitude,oriLongitude),new LatLng(destLatitude,destLongitude))/5000);
+
+    }
+
+    public boolean opponentDetected(){
+        return false;
+    }
+
+    public void startDuel(){
 
     }
 }

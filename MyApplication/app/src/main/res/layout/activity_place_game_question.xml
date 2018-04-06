@@ -35,7 +35,6 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Score : 1"
                     android:textColor="#ffffff"
                     android:textSize="25.0sp"
                     android:textStyle="bold" />
@@ -48,7 +47,6 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="00:00:49"
                     android:textColor="#ffffff"
                     android:textSize="25.0sp"
                     android:textStyle="bold" />
@@ -73,7 +71,6 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="15*2*1-1"
                     android:textColor="#ffffff"
                     android:textSize="35.0sp"
                     android:textStyle="bold" />
@@ -86,6 +83,7 @@
                 android:weightSum="1" >
                 <Button
                     android:id="@+id/button1"
+                    android:clickable = "false"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -94,11 +92,11 @@
                     android:layout_marginTop="5dp"
                     android:background="#fff"
                     android:gravity="center"
-                    android:text="30"
                     android:textColor="#000000"
                     android:textSize="25.0sp" />
                 <Button
                     android:id="@+id/button2"
+                    android:clickable = "false"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -107,11 +105,11 @@
                     android:layout_marginTop="5dp"
                     android:background="#fff"
                     android:gravity="center"
-                    android:text="29"
                     android:textColor="#000000"
                     android:textSize="25.0sp" />
                 <Button
                     android:id="@+id/button3"
+                    android:clickable = "false"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -120,7 +118,6 @@
                     android:layout_marginTop="5dp"
                     android:background="#fff"
                     android:gravity="center"
-                    android:text="32"
                     android:textColor="#000000"
                     android:textSize="25.0sp" />
             </LinearLayout>
