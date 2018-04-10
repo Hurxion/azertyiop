@@ -36,7 +36,7 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
         rollDice.setOnClickListener(this);
 
 
-        DatabaseReference anotherOne = myRef;
+        DatabaseReference anotherOne = myRef.child("users").child("Jordan");
 
         // Read from the database
         anotherOne.addValueEventListener(new ValueEventListener() {
@@ -45,6 +45,10 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                //widget.setText(value.toString());
+
+                String value = dataSnapshot.child("name").getValue(String.class);
+                EditText widget = (EditText) findViewById(R.id.editText);
+                widget.setText(value);
 
                 //Log.d(TAG, "Value is: " + value);
             }

@@ -77,9 +77,12 @@ public void getQuestion(){
                 break;
             case R.id.scores:
                 //Intent i2 = new Intent(MainMenuActivity.this, rollDiceActivity.class);
-                Intent i2 = new Intent(MainMenuActivity.this, ConnectionActivity.class);
+                /*Intent i2 = new Intent(MainMenuActivity.this, ConnectionActivity.class);
                 startActivity(i2);
-                finish();
+                finish();*/
+                Intent i2;
+                i2 = new Intent(MainMenuActivity.this, TwoDevice2P_names.class);
+                startActivity(i2);
                 break;
             case R.id.Réglages:
                 Intent i3 = new Intent(MainMenuActivity.this, SettingsActivity.class);
