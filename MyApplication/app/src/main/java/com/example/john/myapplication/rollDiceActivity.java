@@ -1,12 +1,14 @@
 package com.example.john.myapplication;
 
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
@@ -21,17 +23,15 @@ public class rollDiceActivity extends AppCompatActivity implements SensorEventLi
 
 
     public static final Random RANDOM = new Random();
-    private Button rollDices;
     private ImageView imageView1;
-
-
     private SensorManager sensorMan;
     private Sensor accelerometer;
-
     private float[] mGravity;
     private float mAccel;
     private float mAccelCurrent;
     private float mAccelLast;
+    public static int rollDiceResult;
+    private boolean isRepeated;
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -41,6 +41,13 @@ public class rollDiceActivity extends AppCompatActivity implements SensorEventLi
         setContentView(R.layout.activity_roll_dice);
         imageView1 = (ImageView) findViewById(R.id.imageView1);
 
+        Bundle bundle = getIntent().getExtras();
+        isRepeated = bundle.getBoolean("isRepeated");
+
+        if(isRepeated) {
+            TextView result= (TextView) findViewById(R.id.result);
+            result.setText("Vous avez obtenu le même resultat. \nVeuillez lancer le dé une autre fois.");
+        }
 
         sensorMan = (SensorManager)getSystemService(SENSOR_SERVICE);
         accelerometer = sensorMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -64,13 +71,21 @@ public class rollDiceActivity extends AppCompatActivity implements SensorEventLi
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                int value = randomDiceValue();
-                int res = getResources().getIdentifier("dice_" + value, "drawable", "com.example.john.myapplication");
-
+                rollDiceResult = randomDiceValue();
+                int res = getResources().getIdentifier("dice_" + rollDiceResult, "drawable", "com.example.john.myapplication");
                 imageView1.setImageResource(res);
                 TextView result= (TextView) findViewById(R.id.result);
-                result.setText("Le résultat est "+value+"\nVeuillez attendre votre challenger...");
+                result.setText("Le résultat est "+rollDiceResult+".");
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        Intent intent = new Intent(rollDiceActivity.this, TwoDevice2P.class);
+                        startActivity(intent);
+                    }
+                }, 5000);
+
                 sensorMan.unregisterListener(rollDiceActivity.this);
+
             }
 
             @Override

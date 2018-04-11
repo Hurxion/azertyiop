@@ -83,6 +83,7 @@ public void getQuestion(){
                 Intent i2;
                 i2 = new Intent(MainMenuActivity.this, TwoDevice2P_names.class);
                 startActivity(i2);
+                finish();
                 break;
             case R.id.Réglages:
                 Intent i3 = new Intent(MainMenuActivity.this, SettingsActivity.class);

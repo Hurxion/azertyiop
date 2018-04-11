@@ -161,7 +161,12 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                 MyLatLng = new LatLng(Mylocation.getLatitude(), Mylocation.getLongitude());
                 if (countFinished) {
                     Intent i = new Intent(GoogleMapsActivity.this, CountDownFinishedActivity.class);
-                    currentPlayer.addToScore(-currentPlace.nbPoint);
+                    //currentPlayer.addToScore(-currentPlace.nbPoint);
+
+
+                    //PQ?
+
+
                     countFinished = false;
                     i.putExtra("currentPlace", currentPlace);
                     i.putExtra("currentPlayer", currentPlayer);
@@ -169,13 +174,31 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
                 }
                 if (directDistance(MyLatLng, currentPlace.latLng) < rayonPlace) {
+
+                    //currentPlayer.addToScore(currentPlace.nbPoint);
+
+                    //PQ??
+
+
+
+
+                    countFinished = false;
+                    countDownTimer.cancel();
+
+                    Intent i= new Intent(GoogleMapsActivity.this, gameElection.class);
+
+                    i.putExtra("currentPlace", currentPlace);
+                    i.putExtra("currentPlayer", currentPlayer);
+                    startActivity(i);
+
+                    /*
                     Intent i = new Intent(GoogleMapsActivity.this, PlaceGameQuestionActivity.class);
                     currentPlayer.addToScore(currentPlace.nbPoint);
                     countFinished = false;
                     countDownTimer.cancel();
                     i.putExtra("currentPlace", currentPlace);
                     i.putExtra("currentPlayer", currentPlayer);
-                    startActivity(i);
+                    startActivity(i);*/
                 }
 
                 if(opponentDetected()){
@@ -506,31 +529,31 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         final DatabaseReference myRef = database.getReference();
         DatabaseReference anotherOne = myRef.child("infos").child("nbPlaces");
         readData(new Place.MyCallback() {
-            @Override
-            public void onCallback(Place p) {
-                if(currentPlace != null){
-                    if (currentPlace.marker != null) {
-                        currentPlace.marker.remove();
-                    }
-                }
+                     @Override
+                     public void onCallback(Place p) {
+                         if(currentPlace != null){
+                             if (currentPlace.marker != null) {
+                                 currentPlace.marker.remove();
+                             }
+                         }
 
-                currentPlace = p;
-                int strokeColor = 0xffff0000;
-                //opaque red fill
-                int shadeColor = 0x44ff0000;
-                CircleOptions circleOptions = new CircleOptions().center(currentPlace.latLng).radius(rayonPlace).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(2);
-                mCircle = mMap.addCircle(circleOptions);
-                currentPlace.marker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(currentPlace.latLng.latitude, currentPlace.latLng.longitude))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                startTimer();
-                InfoText.setText(currentPlayer.getName() + " : Objectif " + currentPlace.nom);
-                startRepeatingTask();
+                         currentPlace = p;
+                         int strokeColor = 0xffff0000;
+                         //opaque red fill
+                         int shadeColor = 0x44ff0000;
+                         CircleOptions circleOptions = new CircleOptions().center(currentPlace.latLng).radius(rayonPlace).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(2);
+                         mCircle = mMap.addCircle(circleOptions);
+                         currentPlace.marker = mMap.addMarker(new MarkerOptions()
+                                 .position(new LatLng(currentPlace.latLng.latitude, currentPlace.latLng.longitude))
+                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                         startTimer();
+                         InfoText.setText(currentPlayer.getName() + " : Objectif " + currentPlace.nom);
+                         startRepeatingTask();
 
-            }
+                     }
 
 
-            }
+                 }
         );
     }
 
@@ -600,8 +623,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                 input.close();
             }
             JSONObject jsonObject = new JSONObject(reponse.toString());
-
-
 // routesArray contains ALL routes
             JSONArray routesArray = jsonObject.getJSONArray("routes");
 // Grab the first route
@@ -610,7 +631,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
             JSONArray legs = route.getJSONArray("legs");
 // Grab first leg
             JSONObject leg = legs.getJSONObject(0);
-
             JSONObject durationObject = leg.getJSONObject("duration");
             duration = durationObject.getString("text");
         } catch (MalformedURLException e) {

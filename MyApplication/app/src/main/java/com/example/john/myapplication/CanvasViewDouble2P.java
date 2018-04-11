@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
+
 public class CanvasViewDouble2P extends View { //you have to create a new java file and then insert the same file in the xml of the page in which you want the canvas
     Paint paint = new Paint();
     Paint paintx = new Paint();
@@ -44,6 +45,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
     String p2Name;
     public static int[][] a = new int[3][3];
     public static int turn = 0;
+    private static final int Finished_Activity = 3;
 
     public static ConnectedThread connectedThread = null;
 
@@ -150,58 +152,10 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                         status = status.concat(";" + turn);
                         byte[] ByteArray = status.getBytes();
                         connectedThread.write(ByteArray);
-                        if (turn == 1) {
 
-                            p1Name = TwoDevice2P_names.MyName.trim().toUpperCase();
-                            p2Name = TwoDevice2P_names.OpponentName.trim().toUpperCase();
+                        p1Name = TwoDevice2P_names.MyName.trim().toUpperCase();
+                        p2Name = TwoDevice2P_names.OpponentName.trim().toUpperCase();
 
-
-/*                            two_player_names.p1Name = TwoDevice2P_names.MyName.trim().toUpperCase();
-                            two_player_names.p2Name = TwoDevice2P_names.OpponentName.trim().toUpperCase();
-                            String tmp = dbh.checkUser(two_player_names.p1Name);
-                            if (tmp.equals("FOUND")) {
-                                //Toast.makeText(two_player_names.this,"found 1",Toast.LENGTH_SHORT).show();
-                            } else {
-                                scoreboard sb = new scoreboard(dbh.getPlayerCount(), two_player_names.p1Name, 0);
-                                //Toast.makeText(two_player_names.this,"adding  1",Toast.LENGTH_SHORT).show();
-                                dbh.addScore(sb);
-                            }
-
-                            String tmp2 = dbh.checkUser(two_player_names.p2Name);
-                            if (tmp2.equals("FOUND")) {
-                                //Toast.makeText(two_player_names.this,"found 2",Toast.LENGTH_SHORT).show();
-
-                            } else {
-                                scoreboard sb = new scoreboard(dbh.getPlayerCount(), two_player_names.p2Name, 0);
-                                //Toast.makeText(two_player_names.this,"adding 2",Toast.LENGTH_SHORT).show();
-                                dbh.addScore(sb);
-                            }*/
-                        } else if (turn == 2) {
-
-                            p1Name = TwoDevice2P_names.MyName.trim().toUpperCase();
-                            p2Name = TwoDevice2P_names.OpponentName.trim().toUpperCase();
-
-/*                            two_player_names.p2Name = TwoDevice2P_names.MyName.trim().toUpperCase();
-                            two_player_names.p1Name = TwoDevice2P_names.OpponentName.trim().toUpperCase();
-                            String tmp = dbh.checkUser(two_player_names.p1Name);
-                            if (tmp.equals("FOUND")) {
-                                //Toast.makeText(two_player_names.this,"found 1",Toast.LENGTH_SHORT).show();
-                            } else {
-                                scoreboard sb = new scoreboard(dbh.getPlayerCount(), two_player_names.p1Name, 0);
-                                //Toast.makeText(two_player_names.this,"adding  1",Toast.LENGTH_SHORT).show();
-                                dbh.addScore(sb);
-                            }
-
-                            String tmp2 = dbh.checkUser(two_player_names.p2Name);
-                            if (tmp2.equals("FOUND")) {
-                                //Toast.makeText(two_player_names.this,"found 2",Toast.LENGTH_SHORT).show();
-
-                            } else {
-                                scoreboard sb = new scoreboard(dbh.getPlayerCount(), two_player_names.p2Name, 0);
-                                //Toast.makeText(two_player_names.this,"adding 2",Toast.LENGTH_SHORT).show();
-                                dbh.addScore(sb);
-                            }*/
-                        }
                         touchEnabled = false;
                     }
 
@@ -271,54 +225,18 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
         );
     }
 
-    public void updateWin(int i) {
-/*        if (i == 1) {
-            String tmp = "FOUND";
-            try {
-                tmp = dbh.checkUser(two_player_names.p1Name);
-            } catch (Exception e) {
-                Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            if (tmp.equals("FOUND")) {
-                scoreboard sb = dbh.getPlayer(two_player_names.p1Name);
-                scoreboard sb2 = new scoreboard(sb.get_id(), sb.get_name(), (sb.get_score()) + 1);
-                dbh.updatePlayer(sb2);
-            } else {
-                scoreboard sb = new scoreboard(dbh.getPlayerCount(), two_player_names.p1Name, 1);
-                dbh.addScore(sb);
-            }
-        } else if (i == 2) {
-            String tmp = "FOUND";
-            try {
-                tmp = dbh.checkUser(two_player_names.p1Name);
-            } catch (Exception e) {
-                Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            if (tmp.equals("FOUND")) {
-                scoreboard sb = dbh.getPlayer(two_player_names.p2Name);
-                scoreboard sb2 = new scoreboard(sb.get_id(), sb.get_name(), (sb.get_score()) + 1);
-                dbh.updatePlayer(sb2);
-            } else {
-                scoreboard sb = new scoreboard(dbh.getPlayerCount(), two_player_names.p2Name, 1);
-                dbh.addScore(sb);
-            }
-        }*/
-    }
 
     public void check() {
         if (!oncewin) {
+            String winner="";
             if (a[0][0] == a[0][1] && a[0][1] == a[0][2]) {
                 if (a[0][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p1Name + " wins! ");
-                    updateWin(1);
+                    winner="Player 1";
                     oncewin = true;
                 } else if (a[0][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p2Name + " wins! ");
-                    updateWin(2);
+                    winner="Player 2";
                     oncewin = true;
                 }
             }
@@ -326,13 +244,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             if (a[1][0] == a[1][1] && a[1][1] == a[1][2]) {
                 if (a[1][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p1Name + " wins! ");
-                    updateWin(1);
+                    winner="Player 1";
                     oncewin = true;
                 } else if (a[1][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p2Name + " wins! ");
-                    updateWin(2);
+                    winner="Player 2";
                     oncewin = true;
                 }
             }
@@ -340,13 +256,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             if (a[2][0] == a[2][1] && a[2][1] == a[2][2]) {
                 if (a[2][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p1Name + " wins! ");
-                    updateWin(1);
+                    winner="Player 1";
                     oncewin = true;
                 } else if (a[2][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p2Name + " wins! ");
-                    updateWin(2);
+                    winner="Player 2";
                     oncewin = true;
                 }
             }
@@ -354,13 +268,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             if (a[0][0] == a[1][0] && a[1][0] == a[2][0]) {
                 if (a[0][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p1Name + " wins! ");
-                    updateWin(1);
+                    winner="Player 1";
                     oncewin = true;
                 } else if (a[0][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p2Name + " wins! ");
-                    updateWin(2);
+                    winner="Player 2";
                     oncewin = true;
                 }
             }
@@ -368,13 +280,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             if (a[0][1] == a[1][1] && a[1][1] == a[2][1]) {
                 if (a[0][1] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p1Name + " wins! ");
-                    updateWin(1);
+                    winner="Player 1";
                     oncewin = true;
                 } else if (a[0][1] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p2Name + " wins! ");
-                    updateWin(2);
+                    winner="Player 2";
                     oncewin = true;
                 }
             }
@@ -382,13 +292,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             if (a[0][2] == a[1][2] && a[1][2] == a[2][2]) {
                 if (a[0][2] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p1Name + " wins! ");
-                    updateWin(1);
+                    winner="Player 1";
                     oncewin = true;
                 } else if (a[0][2] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p2Name + " wins! ");
-                    updateWin(2);
+                    winner="Player 2";
                     oncewin = true;
                 }
             }
@@ -396,13 +304,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             if (a[0][0] == a[1][1] && a[1][1] == a[2][2]) {
                 if (a[0][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p1Name + " wins! ");
-                    updateWin(1);
+                    winner="Player 1";
                     oncewin = true;
                 } else if (a[0][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p2Name + " wins! ");
-                    updateWin(2);
+                    winner="Player 2";
                     oncewin = true;
                 }
             }
@@ -410,13 +316,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             if (a[0][2] == a[1][1] && a[1][1] == a[2][0]) {
                 if (a[0][2] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p1Name + " wins! ");
-                    updateWin(1);
+                    winner="Player 1";
                     oncewin = true;
                 } else if (a[0][2] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
-                    showAlert(p2Name + " wins! ");
-                    updateWin(2);
+                    winner="Player 2";
                     oncewin = true;
                 }
             }
@@ -425,8 +329,15 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                 //Toast.makeText(getContext(),"Match results in a draw!",Toast.LENGTH_SHORT).show();
                 showAlert("Match results in a draw!");
                 oncedrawen = true;
-                updateWin(0);
             }
+
+
+            if ( winner != "") {
+                Intent intent = new Intent(ctx, ticTacToeEndActivity.class);
+                intent.putExtra("winner", winner);
+                ctx.startActivity(intent);
+            }
+
         }
     }
 
@@ -435,6 +346,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private int cnt = 0;
+        private int rollDiceResult=0;
 
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
@@ -511,11 +423,22 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                         );
                     } else if (readMessage.equals("END")) {
                         break;
-                    } else {
+                    } else if(readMessage.contains("@")){
+
+                        int resultDiceOponent=Integer.parseInt(readMessage.split("@")[1]);
+                        Log.i("Readable rollDiceResult", ""+resultDiceOponent);
+
+                        if(resultDiceOponent > rollDiceResult) {
+                            touchEnabled = false;
+                        } else if (resultDiceOponent > rollDiceResult) {
+                            touchEnabled = true;
+                        } else if(resultDiceOponent == rollDiceResult) {
+                            Intent intent=new Intent(ctx, rollDiceActivity.class);
+                            intent.putExtra("isRepeated", true);
+                            ctx.startActivity(intent);
+                        }
+
                         try {
-                            Log.i(TAG, "Hello");
-                            TwoDevice2P_names.OpponentName = readMessage;
-                            Log.i(TAG, TwoDevice2P_names.MyName + " vs " + TwoDevice2P_names.OpponentName);
                             TwoDevice2P.act_2p.runOnUiThread(
                                     new Runnable() {
                                         @Override
@@ -527,6 +450,20 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                         } catch (Exception e) {
                             Log.d(TAG, e.getMessage());
                         }
+                    } else {
+
+                            Log.i(TAG, "Hello");
+                            TwoDevice2P_names.OpponentName = readMessage;
+                            Log.i(TAG, TwoDevice2P_names.MyName + " vs " + TwoDevice2P_names.OpponentName);
+
+
+                            rollDiceResult = rollDiceActivity.rollDiceResult;
+                            String dice = "rollDice";
+                            dice=dice.concat("@"+rollDiceResult);
+                            Log.i(TAG,dice);
+                            byte[] ByteArray = dice.getBytes();
+                            connectedThread.write(ByteArray);
+
                     }
                 } catch (Exception e) {
                     //Log.e(TAG, "disconnected", e);

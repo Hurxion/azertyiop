@@ -59,7 +59,8 @@
         <activity android:name=".GenerateDB" />
         <activity android:name=".TwoDevice2P" />
         <activity android:name=".TwoDevice2P_names" />
-
+        <activity android:name=".gameElection" />
+        <activity android:name=".ticTacToeEndActivity"></activity>
     </application>
 
 </manifest>

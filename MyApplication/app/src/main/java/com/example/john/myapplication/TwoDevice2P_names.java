@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class TwoDevice2P_names extends AppCompatActivity {
     public static String MyName = "";
     public static String OpponentName;
     Button btn;
-    EditText name;
+    TextView name;
 
     boolean refreshEnabled = false;
 
@@ -42,6 +43,8 @@ public class TwoDevice2P_names extends AppCompatActivity {
     public static BluetoothSocket mBluetoothSocket = null;
     ListeningThread t = null;
     ConnectingThread ct = null;
+    public static  Place currentPlace;
+    public static Player currentPlayer;
 
     private final static UUID uuid = UUID.fromString("fc5ffc49-00e3-4c8b-9cf1-6b72aad1001a");
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -59,8 +62,11 @@ public class TwoDevice2P_names extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_two_device2_p_names);
         btn = (Button) findViewById(R.id.btn_find);
-        name = (EditText) findViewById(R.id.myName);
-        name.setText(MyName);
+        name = (TextView) findViewById(R.id.myName);
+        Intent i2 = getIntent();
+        currentPlace =(Place) i2.getSerializableExtra("currentPlace");
+        currentPlayer =(Player) i2.getSerializableExtra("currentPlayer");
+        name.setText(currentPlayer.getName());
         btn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -175,8 +181,12 @@ public class TwoDevice2P_names extends AppCompatActivity {
 
         mBluetoothDevice = device;
         mBluetoothSocket = socket;
-        Intent intent = new Intent(TwoDevice2P_names.this, TwoDevice2P.class);
+        /*Intent intent = new Intent(TwoDevice2P_names.this, TwoDevice2P.class);
+        startActivityForResult(intent, Finished_Activity);*/
+        Intent intent=new Intent(TwoDevice2P_names.this, rollDiceActivity.class);
+        intent.putExtra("isRepeated", false);
         startActivityForResult(intent, Finished_Activity);
+
 
     }
 
@@ -266,7 +276,6 @@ public class TwoDevice2P_names extends AppCompatActivity {
             if (bluetoothSocket != null && bluetoothDevice != null) {
                 connected(bluetoothSocket, bluetoothDevice);
             }
-
         }
 
         // Cancel an open connection and terminate the thread

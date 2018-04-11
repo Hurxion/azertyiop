@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:ads="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="#0080ff"
+android:orientation="vertical">
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_gravity="center"
+    android:layout_marginTop="50dp"
+    android:gravity="center"
+    android:inputType="textMultiLine"
+    android:theme="@style/buttonstyle"
+    android:text="Veuilliez choisir le genre du jeu"
+    android:textColor="#ffffff"
+    android:textSize="25.0sp"
+    android:textStyle="bold" />
+
+<Button
+    android:id="@+id/individuel"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="80dp"
+    android:layout_marginRight="80dp"
+    android:layout_marginTop="150dp"
+    android:gravity="center"
+    android:theme="@style/buttonstyle"
+    android:text="Individuel"
+    />
+
+<Button
+    android:id="@+id/duel"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="80dp"
+    android:layout_marginRight="80dp"
+    android:layout_marginTop="15dp"
+    android:theme="@style/buttonstyle"
+    android:gravity="center"
+    android:text="Duel"
+    />
+
+</LinearLayout>

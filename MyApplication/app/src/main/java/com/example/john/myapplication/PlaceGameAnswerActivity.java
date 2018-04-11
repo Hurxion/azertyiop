@@ -40,6 +40,7 @@ import android.widget.TextView;
                 textResult.setText("Dommage " + currentPlayer.getName() + " mauvaise réponse, tu obtiens quand même " + currentPlace.nbPoint + " points pour ta course, ton score est maintenant de " + currentPlayer.getScore());
             }
 
+
         }
 
         //ONclick

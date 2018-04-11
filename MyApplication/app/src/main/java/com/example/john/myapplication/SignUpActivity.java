@@ -63,6 +63,10 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
