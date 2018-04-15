@@ -30,8 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DisplayNetworkActivity" />
-        <activity android:name=".FavoritesActivity" />
         <activity android:name=".SettingsActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

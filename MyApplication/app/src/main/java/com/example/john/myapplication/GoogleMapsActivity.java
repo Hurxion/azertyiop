@@ -80,7 +80,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import static android.os.SystemClock.sleep;
 import static com.example.john.myapplication.Place.safeLongToInt;
 
-public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static double rangeRandom = 0.02; // Rayon maximum pour placer les marqueurs sur la map
     private static int mInterval = 500; // Nombre de ms entre deux tâches
@@ -232,7 +232,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         cheatMode = true;
         if (cheatMode) {
-            cheatposition = new LatLng(45.50273312, -73.61833595);
+            cheatposition = new LatLng(45.5149172, -73.64364974);
         }
 
         //Initialisation pour la carte GoogleMap
@@ -268,6 +268,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         super.onResume();
         if (mHandler != null) {
             mHandler.removeCallbacks(mStatusChecker);
+            if(countDownTimer != null){
+                countDownTimer.cancel();
+            }
             changePlace();
 
         }
@@ -325,29 +328,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
-
-    /**
-     * Méthode appelée lorsqu'un utilisateur clique sur une fenêtre d'un marqueur
-     * On démarre l'activité DisplayNetworkActivity
-     */
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        Intent sendIntent = new Intent(GoogleMapsActivity.this, DisplayNetworkActivity.class);
-        WifiRouter Routeur = (WifiRouter) marker.getTag();
-
-        String ssid = Routeur.getSSID();
-        String bssid = Routeur.getBSSID();
-        String security = Routeur.getSecurite();
-        int rssi = Routeur.getRSSI();
-        sendIntent.putExtra("SSID", ssid);
-        sendIntent.putExtra("BSSID", bssid);
-        sendIntent.putExtra("security", security);
-        sendIntent.putExtra("rssi", rssi);
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
-
-    }
 
 
     /**
@@ -532,6 +512,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                                  currentPlace.marker.remove();
                              }
                          }
+                         if(mCircle!=null){
+                             mCircle.remove();
+                         }
 
                          currentPlace = p;
                          int strokeColor = 0xffff0000;
@@ -600,45 +583,8 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     private int TimeOnRoad(double oriLatitude, double oriLongitude,
                            double destLatitude, double destLongitude) {
-        /*String stringUrl = "http://maps.google.com/maps/api/directions/json?origin="
-                + oriLatitude + "," + oriLongitude + "&destination=" + destLatitude
-                + "," + destLongitude + "&sensor=false&units=metric";
-        ;
-        String duration = "20000";
-        StringBuilder reponse = new StringBuilder();
-        URL url = null;
-        try {
-            url = new URL(stringUrl);
-            HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
-            if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                BufferedReader input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()), 8192);
-                String strLine = null;
-                while ((strLine = input.readLine()) != null) {
-                    reponse.append(strLine);
-                }
-                input.close();
-            }
-            JSONObject jsonObject = new JSONObject(reponse.toString());
-// routesArray contains ALL routes
-            JSONArray routesArray = jsonObject.getJSONArray("routes");
-// Grab the first route
-            JSONObject route = routesArray.getJSONObject(0);
-// Take all legs from the route
-            JSONArray legs = route.getJSONArray("legs");
-// Grab first leg
-            JSONObject leg = legs.getJSONObject(0);
-            JSONObject durationObject = leg.getJSONObject("duration");
-            duration = durationObject.getString("text");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return Integer.parseInt(duration);*/
-        return (int)(3600*directDistance(new LatLng(oriLatitude,oriLongitude),new LatLng(destLatitude,destLongitude))/5000);
 
+        return (int)(3600*directDistance(new LatLng(oriLatitude,oriLongitude),new LatLng(destLatitude,destLongitude))/5000);
     }
 
     public boolean opponentDetected(){

@@ -51,15 +51,6 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         //getQuestion();
 }
 
-public void getQuestion(){
-    Intent i = new Intent(MainMenuActivity.this, GetQuestion.class);
-    startActivity(i);
-    finish();
-    Bundle b = getIntent().getExtras();
-    Question q  = (Question) b.getSerializable("Question");
-
-
-}
     public void onClick(View v) {
 
         switch(v.getId()){
@@ -76,10 +67,6 @@ public void getQuestion(){
                 finish();
                 break;
             case R.id.scores:
-                //Intent i2 = new Intent(MainMenuActivity.this, rollDiceActivity.class);
-                /*Intent i2 = new Intent(MainMenuActivity.this, ConnectionActivity.class);
-                startActivity(i2);
-                finish();*/
                 Intent i2;
                 i2 = new Intent(MainMenuActivity.this, ticTacToeEndActivity.class);
                 startActivity(i2);

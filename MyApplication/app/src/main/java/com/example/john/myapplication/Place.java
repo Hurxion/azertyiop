@@ -39,54 +39,7 @@ public class Place implements Serializable {
 
     }
 
-    public Place() {
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference();
-        DatabaseReference anotherOne = myRef.child("infos").child("nbPlaces");
-        readData(new MyCallback() {
-            @Override
-            public void onCallback(Place p) {
-                while(p.nom == null){
-                    id = p.id;
-                    nom = p.nom;
-                    nbPoint = p.nbPoint;
-                    Lat = p.Lat;
-                    Long = p.Long;
-                    latLng = new LatLng(Lat,Long);
-                }
 
-
-            }
-        });
-    }
-
-
-
-    public void readData(final MyCallback myCallback) {
-         FirebaseDatabase database = FirebaseDatabase.getInstance();
-         final DatabaseReference myRef = database.getReference();
-          myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Place p = new Place(0, "", new LatLng(0,0),0);
-                int value = safeLongToInt(dataSnapshot.child("infos").child("nbPlaces").getValue(Long.class));
-                p.id = 1 + (int)(Math.random() * ((value - 1) + 1));
-                p.nom = dataSnapshot.child("places").child(Integer.toString(p.id)).child("nom").getValue(String.class);
-                p.Lat = (dataSnapshot.child("places").child(Integer.toString(p.id)).child("Lat").getValue(Double.class));
-                p.Long = (double) dataSnapshot.child("places").child(Integer.toString(p.id)).child("Long").getValue(Double.class);
-                p.nbPoint = safeLongToInt(dataSnapshot.child("places").child(Integer.toString(p.id)).child("nbPoint").getValue(Long.class));
-                try {
-                    sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                myCallback.onCallback(p);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-    }
 
     public interface MyCallback {
         void onCallback(Place p);

@@ -20,8 +20,6 @@ import java.io.IOException;
 public class SettingsActivity extends AppCompatActivity {
     private int seekBarValue;
     private Context ctx;
-    private FileManager fileManager = null;
-    private String fileName;
 
 
     @Override
@@ -31,8 +29,6 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         this.ctx = this;
-        this.fileManager = new FileManager();
-        this.fileName = "favorites.txt";
         // SeekBar afin de régler la durée entre 2 scans
         final SeekBar seek=(SeekBar) findViewById(R.id.seekBar);
         seek.setProgress(GoogleMapsActivity.getmInterval());
@@ -71,25 +67,10 @@ public class SettingsActivity extends AppCompatActivity {
 
        // Bouton permettant de supprimer tous les favoris
         Button b = findViewById(R.id.delete);
-        if(fileManager.isEmpty(fileName,this.ctx)){
-            b.setEnabled(false);
-        }
-        else{
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        fileManager.writeFile(fileName,"",ctx);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    view.setEnabled(false);
-                }
-        });
 
 
         }
 
 
     }
-}
+
