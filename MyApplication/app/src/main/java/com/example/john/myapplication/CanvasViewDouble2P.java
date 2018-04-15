@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -47,6 +48,8 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
     public static int[][] a = new int[3][3];
     public static int turn = 0;
     private static final int Finished_Activity = 3;
+    int rollDiceResult=0;
+    int resultDiceOponent=0;
 
     public static ConnectedThread connectedThread = null;
 
@@ -66,6 +69,8 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
         oncedrawen = false;
         oncewin = false;
         turn = 0;
+
+
     }
 
     public CanvasViewDouble2P(Context context, AttributeSet attrs) {
@@ -95,10 +100,16 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
         connectedThread.start();
 
         init();
+
+
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
+
+        whoBegins();
+
         if (playerRematch && oppontentRematch) {
             init();
             playerRematch = false;
@@ -124,11 +135,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                 }
             }
         }
-        try {
-            check();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        check();
     }
 
     @Override
@@ -166,11 +173,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
 
                     if (!oncewin && !oncedrawen) {
                         invalidate();
-                        try {
-                            check();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        check();
                     } else {
                         try {
                             connectedThread = null;
@@ -186,6 +189,24 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
         }
         return true;
+    }
+
+    public void whoBegins() {
+
+        while( rollDiceResult == 0 || resultDiceOponent == 0 ){
+            ;
+        }
+
+
+        if(resultDiceOponent < rollDiceResult) {
+            TextView result= (TextView) TwoDevice2P.act_2p.findViewById(R.id.begin);
+            result.setText("Vous commencez le jeu.");
+            invalidate();
+        } else if (resultDiceOponent > rollDiceResult) {
+            TextView result = (TextView) TwoDevice2P.act_2p.findViewById(R.id.begin);
+            result.setText("Votre adversaire commence le jeu.");
+            invalidate();
+        }
     }
 
     public void showAlert(final String str) {
@@ -235,7 +256,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
     }
 
 
-    public void check() throws IOException {
+    public void check() {
         if (!oncewin) {
             String winner="";
             if (a[0][0] == a[0][1] && a[0][1] == a[0][2]) {
@@ -336,25 +357,26 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
 
             if (turn == 9 && !oncewin) {
                 //Toast.makeText(getContext(),"Match results in a draw!",Toast.LENGTH_SHORT).show();
-                rollDiceActivity.act_rollDice.finish();
-                oncedrawen = true;
                 showAlert("Match results in a draw!");
+                oncedrawen = true;
             }
 
-
-            if ( oncewin ) {
-                String endMsg = "END";
-                byte[] ByteArray = endMsg.getBytes();
-                connectedThread.write(ByteArray);
-                connectedThread.cancel();
-                connectedThread = null;
-                bluetoothSocket.close();
-                Intent intent = new Intent(ctx, ticTacToeEndActivity.class);
-                intent.putExtra("winner", winner);
-                ctx.startActivity(intent);
-                rollDiceActivity.act_rollDice.finish();
-                TwoDevice2P.act_2p.finish();
-
+            try {
+                if ( oncewin ) {
+                    String endMsg = "END";
+                    byte[] ByteArray = endMsg.getBytes();
+                    connectedThread.write(ByteArray);
+                    connectedThread.cancel();
+                    connectedThread = null;
+                    bluetoothSocket.close();
+                    Intent intent = new Intent(ctx, ticTacToeEndActivity.class);
+                    intent.putExtra("winner", winner);
+                    ctx.startActivity(intent);
+                    rollDiceActivity.act_rollDice.finish();
+                    TwoDevice2P.act_2p.finish();
+                }
+            } catch (IOException e){
+                Log.d(TAG, e.getMessage());
             }
 
         }
@@ -365,8 +387,8 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private int cnt = 0;
-        private int rollDiceResult=0;
-        private int beginner=1;
+
+
 
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
@@ -445,21 +467,20 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                         break;
                     } else if(readMessage.contains("@")){
 
-                        int resultDiceOponent=Integer.parseInt(readMessage.split("@")[1]);
+                        resultDiceOponent=Integer.parseInt(readMessage.split("@")[1]);
                         Log.i("Readable rollDiceResult", ""+resultDiceOponent);
 
                         if(resultDiceOponent > rollDiceResult) {
                             touchEnabled = false;
-                            beginner=2;
                         } else if (resultDiceOponent > rollDiceResult) {
                             touchEnabled = true;
                         } else if(resultDiceOponent == rollDiceResult) {
+
                             Intent intent=new Intent(ctx, rollDiceActivity.class);
                             intent.putExtra("isRepeated", true);
                             ctx.startActivity(intent);
+                            TwoDevice2P.act_2p.finish();
                         }
-
-
 
                         try {
                             TwoDevice2P.act_2p.runOnUiThread(
@@ -473,16 +494,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                         } catch (Exception e) {
                             Log.d(TAG, e.getMessage());
                         }
-
-                        if(beginner==1) {
-                            TextView result= (TextView) TwoDevice2P.act_2p.findViewById(R.id.begin);
-                            result.setText("Vous commencez le jeu.");
-                            postInvalidate();
-                        } else if (beginner == 2) {
-                            TextView result = (TextView) TwoDevice2P.act_2p.findViewById(R.id.begin);
-                            result.setText("Votre adversaire commence le jeu.");
-                            postInvalidate();
-                        }
+                            cnt++;
 
                     } else {
 
@@ -503,6 +515,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                     //Log.e(TAG, "disconnected", e);
                     break;
                 }
+
             }
         }
 
