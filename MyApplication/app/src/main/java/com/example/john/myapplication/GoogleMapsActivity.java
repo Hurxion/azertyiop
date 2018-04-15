@@ -161,10 +161,8 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                 MyLatLng = new LatLng(Mylocation.getLatitude(), Mylocation.getLongitude());
                 if (countFinished) {
                     Intent i = new Intent(GoogleMapsActivity.this, CountDownFinishedActivity.class);
-                    //currentPlayer.addToScore(-currentPlace.nbPoint);
+                    currentPlayer.addToScore(-currentPlace.nbPoint);
 
-
-                    //PQ?
 
 
                     countFinished = false;
@@ -175,10 +173,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                 }
                 if (directDistance(MyLatLng, currentPlace.latLng) < rayonPlace) {
 
-                    //currentPlayer.addToScore(currentPlace.nbPoint);
-
-                    //PQ??
-
+                    currentPlayer.addToScore(currentPlace.nbPoint);
 
 
 
@@ -403,6 +398,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.Menu:
+                currentPlayer.addToScore(-currentPlace.nbPoint);
                 Intent i = new Intent(GoogleMapsActivity.this, MainMenuActivity.class);
                 i.putExtra("logged", true);
                 i.putExtra("Player", currentPlayer);

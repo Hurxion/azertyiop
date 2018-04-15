@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
@@ -123,7 +124,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                 }
             }
         }
-        check();
+        try {
+            check();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -161,7 +166,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
 
                     if (!oncewin && !oncedrawen) {
                         invalidate();
-                        check();
+                        try {
+                            check();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         try {
                             connectedThread = null;
@@ -226,7 +235,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
     }
 
 
-    public void check() {
+    public void check() throws IOException {
         if (!oncewin) {
             String winner="";
             if (a[0][0] == a[0][1] && a[0][1] == a[0][2]) {
@@ -327,15 +336,25 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
 
             if (turn == 9 && !oncewin) {
                 //Toast.makeText(getContext(),"Match results in a draw!",Toast.LENGTH_SHORT).show();
-                showAlert("Match results in a draw!");
+                rollDiceActivity.act_rollDice.finish();
                 oncedrawen = true;
+                showAlert("Match results in a draw!");
             }
 
 
-            if ( winner != "") {
+            if ( oncewin ) {
+                String endMsg = "END";
+                byte[] ByteArray = endMsg.getBytes();
+                connectedThread.write(ByteArray);
+                connectedThread.cancel();
+                connectedThread = null;
+                bluetoothSocket.close();
                 Intent intent = new Intent(ctx, ticTacToeEndActivity.class);
                 intent.putExtra("winner", winner);
                 ctx.startActivity(intent);
+                rollDiceActivity.act_rollDice.finish();
+                TwoDevice2P.act_2p.finish();
+
             }
 
         }
@@ -347,6 +366,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
         private final OutputStream mmOutStream;
         private int cnt = 0;
         private int rollDiceResult=0;
+        private int beginner=1;
 
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
@@ -430,6 +450,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
 
                         if(resultDiceOponent > rollDiceResult) {
                             touchEnabled = false;
+                            beginner=2;
                         } else if (resultDiceOponent > rollDiceResult) {
                             touchEnabled = true;
                         } else if(resultDiceOponent == rollDiceResult) {
@@ -437,6 +458,8 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                             intent.putExtra("isRepeated", true);
                             ctx.startActivity(intent);
                         }
+
+
 
                         try {
                             TwoDevice2P.act_2p.runOnUiThread(
@@ -450,19 +473,30 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                         } catch (Exception e) {
                             Log.d(TAG, e.getMessage());
                         }
+
+                        if(beginner==1) {
+                            TextView result= (TextView) TwoDevice2P.act_2p.findViewById(R.id.begin);
+                            result.setText("Vous commencez le jeu.");
+                            postInvalidate();
+                        } else if (beginner == 2) {
+                            TextView result = (TextView) TwoDevice2P.act_2p.findViewById(R.id.begin);
+                            result.setText("Votre adversaire commence le jeu.");
+                            postInvalidate();
+                        }
+
                     } else {
 
-                            Log.i(TAG, "Hello");
-                            TwoDevice2P_names.OpponentName = readMessage;
-                            Log.i(TAG, TwoDevice2P_names.MyName + " vs " + TwoDevice2P_names.OpponentName);
+                        Log.i(TAG, "Hello");
+                        TwoDevice2P_names.OpponentName = readMessage;
+                        Log.i(TAG, TwoDevice2P_names.MyName + " vs " + TwoDevice2P_names.OpponentName);
 
 
-                            rollDiceResult = rollDiceActivity.rollDiceResult;
-                            String dice = "rollDice";
-                            dice=dice.concat("@"+rollDiceResult);
-                            Log.i(TAG,dice);
-                            byte[] ByteArray = dice.getBytes();
-                            connectedThread.write(ByteArray);
+                        rollDiceResult = rollDiceActivity.rollDiceResult;
+                        String dice = "rollDice";
+                        dice=dice.concat("@"+rollDiceResult);
+                        Log.i(TAG,dice);
+                        byte[] ByteArray = dice.getBytes();
+                        connectedThread.write(ByteArray);
 
                     }
                 } catch (Exception e) {

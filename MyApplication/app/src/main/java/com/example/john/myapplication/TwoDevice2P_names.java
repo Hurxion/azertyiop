@@ -185,8 +185,7 @@ public class TwoDevice2P_names extends AppCompatActivity {
         startActivityForResult(intent, Finished_Activity);*/
         Intent intent=new Intent(TwoDevice2P_names.this, rollDiceActivity.class);
         intent.putExtra("isRepeated", false);
-        startActivityForResult(intent, Finished_Activity);
-
+        startActivity(intent);
 
     }
 

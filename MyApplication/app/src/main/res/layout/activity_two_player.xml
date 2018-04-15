@@ -16,4 +16,16 @@
         android:background="#FFE7BF"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
+
+
+    <TextView
+        android:id="@+id/begin"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:text="" />
 </RelativeLayout>

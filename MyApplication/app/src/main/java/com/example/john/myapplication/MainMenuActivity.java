@@ -81,7 +81,7 @@ public void getQuestion(){
                 startActivity(i2);
                 finish();*/
                 Intent i2;
-                i2 = new Intent(MainMenuActivity.this, TwoDevice2P_names.class);
+                i2 = new Intent(MainMenuActivity.this, ticTacToeEndActivity.class);
                 startActivity(i2);
                 finish();
                 break;

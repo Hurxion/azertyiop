@@ -1,6 +1,7 @@
 package com.example.john.myapplication;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -32,12 +33,14 @@ public class rollDiceActivity extends AppCompatActivity implements SensorEventLi
     private float mAccelLast;
     public static int rollDiceResult;
     private boolean isRepeated;
+    public static Activity act_rollDice;
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        act_rollDice=this;
         setContentView(R.layout.activity_roll_dice);
         imageView1 = (ImageView) findViewById(R.id.imageView1);
 

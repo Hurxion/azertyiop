@@ -124,6 +124,7 @@ public class SignUpActivity extends AppCompatActivity {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
         Intent i = new Intent(SignUpActivity.this, MainMenuActivity.class);
+        i.putExtra("logged", false);
         startActivity(i);
         finish();
     }
