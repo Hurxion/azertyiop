@@ -12,12 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 
 public class ticTacToeEndActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -50,6 +44,7 @@ public class ticTacToeEndActivity extends AppCompatActivity implements View.OnCl
         }
 
         photo.setOnClickListener(this);
+        TwoDevice2P_names.act_2p_names.finish();
 
     }
 
