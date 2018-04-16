@@ -42,9 +42,10 @@ public class ticTacToeEndActivity extends AppCompatActivity implements View.OnCl
             currentPlayer.addToScore(currentPlace.nbPoint);
             textResult.setText("Bravo " + currentPlayer.getName() + " vous avez gagné, vous obtenez " + currentPlace.nbPoint*2 + " points , votre score est maintenant de " + currentPlayer.getScore());
 
-        } /*else {
+        } else if(winner.equals("noWinner")){
             textResult.setText("Dommage " + currentPlayer.getName() + " aucun joueur n'a gagné, vous obtenez quand même " + currentPlace.nbPoint + " points pour ta course, votre score est maintenant de " + currentPlayer.getScore());
-        }*/
+        }
+
 
         photo.setOnClickListener(this);
         TwoDevice2P_names.act_2p_names.finish();

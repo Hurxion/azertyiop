@@ -17,13 +17,10 @@ public class TwoDevice2P extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_two_player);
 
-        Button recommencer= (Button) TwoDevice2P.act_2p.findViewById(R.id.btn_again);
-        recommencer.setVisibility(View.GONE);
-        recommencer.setEnabled(false);
     }
 
 
     public void recommencer(){
-        CanvasViewDouble2P.recommencer2();
+
     }
 }
