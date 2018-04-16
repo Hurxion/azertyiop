@@ -28,7 +28,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
         android:text="" />
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> parent of d99e4f0... Correction Gagnant dans l'activité du final du jeu TicTacToe
 </RelativeLayout>

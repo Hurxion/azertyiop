@@ -45,7 +45,6 @@ public class TwoDevice2P_names extends AppCompatActivity {
     ConnectingThread ct = null;
     public static  Place currentPlace;
     public static Player currentPlayer;
-    public static Activity act_2p_names;
 
     private final static UUID uuid = UUID.fromString("fc5ffc49-00e3-4c8b-9cf1-6b72aad1001a");
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -62,7 +61,6 @@ public class TwoDevice2P_names extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_two_device2_p_names);
-        act_2p_names=this;
         btn = (Button) findViewById(R.id.btn_find);
         name = (TextView) findViewById(R.id.myName);
         Intent i2 = getIntent();

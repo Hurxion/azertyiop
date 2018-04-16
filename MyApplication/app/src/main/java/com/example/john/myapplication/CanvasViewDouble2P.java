@@ -50,7 +50,6 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
     private static final int Finished_Activity = 3;
     int rollDiceResult=0;
     int resultDiceOponent=0;
-    public int pair=1;
 
     public static ConnectedThread connectedThread = null;
 
@@ -141,12 +140,6 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        if (!oncewin && !oncedrawen) {
-            invalidate();
-            check();
-        }
-
         if (event.getAction() == MotionEvent.ACTION_DOWN && touchEnabled) {
             float touchX = event.getX();
             float touchY = event.getY();
@@ -158,7 +151,6 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                     turn++;
 
                     if (turn % 2 == 0) {
-                        pair=2;
                         a[row][col]++;
                     }
 
@@ -170,7 +162,10 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
                             }
                         }
                         status = status.concat(";" + turn);
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of d99e4f0... Correction Gagnant dans l'activité du final du jeu TicTacToe
                         byte[] ByteArray = status.getBytes();
                         connectedThread.write(ByteArray);
 
@@ -269,11 +264,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
         if (!oncewin) {
             String winner="";
             if (a[0][0] == a[0][1] && a[0][1] == a[0][2]) {
-                if (a[0][0] == 1 && pair == 1 ) {
+                if (a[0][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 1";
                     oncewin = true;
-                } else if (a[0][0] == 2 && pair == 2 ) {
+                } else if (a[0][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 2";
                     oncewin = true;
@@ -281,11 +276,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
 
             if (a[1][0] == a[1][1] && a[1][1] == a[1][2]) {
-                if (a[1][0] == 1 && pair == 1 ) {
+                if (a[1][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 1";
                     oncewin = true;
-                } else if (a[1][0] == 2 && pair == 2 ) {
+                } else if (a[1][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 2";
                     oncewin = true;
@@ -293,11 +288,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
 
             if (a[2][0] == a[2][1] && a[2][1] == a[2][2]) {
-                if (a[2][0] == 1 && pair == 1 ) {
+                if (a[2][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 1";
                     oncewin = true;
-                } else if (a[2][0] == 2 && pair == 2 ) {
+                } else if (a[2][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 2";
                     oncewin = true;
@@ -305,11 +300,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
 
             if (a[0][0] == a[1][0] && a[1][0] == a[2][0]) {
-                if (a[0][0] == 1 && pair == 1 ) {
+                if (a[0][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 1";
                     oncewin = true;
-                } else if (a[0][0] == 2 && pair == 2 ) {
+                } else if (a[0][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 2";
                     oncewin = true;
@@ -317,11 +312,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
 
             if (a[0][1] == a[1][1] && a[1][1] == a[2][1]) {
-                if (a[0][1] == 1 && pair == 1 ) {
+                if (a[0][1] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 1";
                     oncewin = true;
-                } else if (a[0][1] == 2 && pair == 2 ) {
+                } else if (a[0][1] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 2";
                     oncewin = true;
@@ -329,11 +324,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
 
             if (a[0][2] == a[1][2] && a[1][2] == a[2][2]) {
-                if (a[0][2] == 1 && pair == 1 ) {
+                if (a[0][2] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 1";
                     oncewin = true;
-                } else if (a[0][2] == 2 && pair == 2 ) {
+                } else if (a[0][2] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 2";
                     oncewin = true;
@@ -341,11 +336,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
 
             if (a[0][0] == a[1][1] && a[1][1] == a[2][2]) {
-                if (a[0][0] == 1 && pair == 1 ) {
+                if (a[0][0] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 1";
                     oncewin = true;
-                } else if (a[0][0] == 2 && pair == 2 ) {
+                } else if (a[0][0] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 2";
                     oncewin = true;
@@ -353,11 +348,11 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
 
             if (a[0][2] == a[1][1] && a[1][1] == a[2][0]) {
-                if (a[0][2] == 1 && pair == 1 ) {
+                if (a[0][2] == 1) {
                     //Toast.makeText(getContext(),"Player 1 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 1";
                     oncewin = true;
-                } else if (a[0][2] == 2 && pair == 2 ) {
+                } else if (a[0][2] == 2) {
                     //Toast.makeText(getContext(),"Player 2 wins! ",Toast.LENGTH_SHORT).show();
                     winner="Player 2";
                     oncewin = true;
@@ -371,7 +366,7 @@ public class CanvasViewDouble2P extends View { //you have to create a new java f
             }
 
             try {
-                if ( oncewin && winner != "" ) {
+                if ( oncewin ) {
                     String endMsg = "END";
                     byte[] ByteArray = endMsg.getBytes();
                     connectedThread.write(ByteArray);
