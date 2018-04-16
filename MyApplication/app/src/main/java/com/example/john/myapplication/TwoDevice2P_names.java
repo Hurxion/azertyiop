@@ -89,7 +89,7 @@ public class TwoDevice2P_names extends AppCompatActivity {
                                 startActivityForResult(enableBluetoothIntent, ENABLE_BT_REQUEST_CODE);
                                 Toast.makeText(TwoDevice2P_names.this, "Bluetooth Enabled", Toast.LENGTH_SHORT).show();
                             } else if (refreshEnabled) {
-                                btn.setText("Find Opponent");
+                                btn.setText("Trouver Adversaires");
                                 refreshEnabled = false;
                                 adapter.clear();
                                 bluetoothAdapter.disable();
