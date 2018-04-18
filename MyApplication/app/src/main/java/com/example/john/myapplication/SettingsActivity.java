@@ -30,43 +30,38 @@ public class SettingsActivity extends AppCompatActivity {
 
         this.ctx = this;
         // SeekBar afin de régler la durée entre 2 scans
-        final SeekBar seek=(SeekBar) findViewById(R.id.seekBar);
-        seek.setProgress(GoogleMapsActivity.getmInterval());
-        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                GoogleMapsActivity.setmInterval(seekBarValue);
-            }
+        Bundle bundle = getIntent().getExtras();
+        int batteryPctCurrent = bundle.getInt("batteryPctCurrent");
+        long upLink = bundle.getLong("upLink");
+        long downLink = bundle.getLong("downLink");
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-                seekBarValue = progress;
-            }
-        });
-
-
-        int level = GoogleMapsActivity.getbatteryPctInitial()-GoogleMapsActivity.getBatteryPctCurrent();///(float) GoogleMapsActivity.getscale();
         TextView batterylvl= findViewById(R.id.batteryUsed);
-        String lvl = "Batterie utilisée depuis le lancement de l'application : " + Integer.toString(level)+"%";
-        batterylvl.setText(lvl);
+        TextView downLinkt = findViewById(R.id.downLink);
+        TextView upLinkt = findViewById(R.id.upLink);
 
-        //Toolbar permettant de revenir à l'activité précédente
+        String lvl = "Batterie utilisée depuis le lancement de l'application : " + Integer.toString(batteryPctCurrent)+"%";
+        String upl = "Uplink : " + String.valueOf(upLink) + " b/s";
+        String dwl = "Downlink : " + String.valueOf(downLink) + " b/s";
+
+        batterylvl.setText(lvl);
+        downLinkt.setText(dwl);
+        upLinkt.setText(upl);
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         myToolbar.setNavigationIcon(R.drawable.back18dp);
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(SettingsActivity.this, MainMenuActivity.class);
+                i.putExtra("logged", false);
+                i.setType("text/plain");
+                startActivity(i);
                 finish();
+
             }
         });
-
-       // Bouton permettant de supprimer tous les favoris
-        Button b = findViewById(R.id.delete);
 
 
         }

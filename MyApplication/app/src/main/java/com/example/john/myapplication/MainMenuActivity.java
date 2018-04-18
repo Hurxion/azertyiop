@@ -1,6 +1,9 @@
 package com.example.john.myapplication;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.TrafficStats;
+import android.os.BatteryManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +16,16 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
 
     private static boolean logged;
     private static Player player;
+    TrafficStats ts;
+    long tStart;
+    long initialRx;
+    long initialTx;
+    private static IntentFilter ifilter;
+    private static Intent batteryStatus;
+    private static int batteryPctInitial;
+    private static int batteryPctCurrent;
+    private static int scale;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +37,16 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         Button Reglages = (Button) findViewById(R.id.Réglages);
         Button Inscription  = (Button) findViewById(R.id.Inscription);
 
+         ts = new TrafficStats();
+         tStart = System.currentTimeMillis();
+         initialRx = ts.getMobileRxBytes();
+         initialTx = ts.getMobileTxBytes();
+
+
+
+        ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        batteryStatus = this.registerReceiver(null, ifilter);
+        batteryPctInitial = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
 
 
         TextView info  = (TextView) findViewById(R.id.Info);
@@ -51,6 +74,26 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         //getQuestion();
 }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        TextView info  = (TextView) findViewById(R.id.Info);
+        Button Jouer = (Button) findViewById(R.id.Jouer);
+
+        Bundle bundle = getIntent().getExtras();
+        logged = bundle.getBoolean("logged");
+        if(logged){
+            player = (Player) bundle.getSerializable("Player");
+            info.setText("Connecté en tant que " + player.getName() );
+
+        }
+        else{
+            Jouer.setEnabled(false);
+            info.setText("Vous devez créer un compte ou vous connecter pour Jouer");
+        }
+    }
+
     public void onClick(View v) {
 
         switch(v.getId()){
@@ -59,28 +102,44 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
                 i.putExtra("Player", player);
                 i.setType("text/plain");
                 startActivity(i);
-                finish();
                 break;
             case R.id.connexion:
                 Intent i1 = new Intent(MainMenuActivity.this, LoginActivity.class);
                 startActivity(i1);
-                finish();
                 break;
             case R.id.scores:
                 Intent i2;
                 i2 = new Intent(MainMenuActivity.this, ticTacToeEndActivity.class);
                 startActivity(i2);
-                finish();
                 break;
             case R.id.Réglages:
+                long tEnd = System.currentTimeMillis();
+                long tDelta = tEnd - tStart;
+                double elapsedSeconds = tDelta / 1000.0;
+                long laterRx=ts.getMobileRxBytes(); //Après
+                double bandWidthRDown = (laterRx-initialRx)/elapsedSeconds;
+
+                long tEnd2 = System.currentTimeMillis();
+                long tDelta2 = tEnd2 - tStart;
+                double elapsedSeconds2 = tDelta2 / 1000.0;
+                long laterTx2 =ts.getMobileTxBytes(); //Après
+                double bandWidthRx2Up = (laterTx2 -initialTx)/elapsedSeconds2;
+
+                batteryStatus = this.registerReceiver(null, ifilter);
+                batteryPctCurrent = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) - batteryPctInitial;
+
                 Intent i3 = new Intent(MainMenuActivity.this, SettingsActivity.class);
+
+                i3.putExtra("downLink", bandWidthRDown);
+                i3.putExtra("upLink", bandWidthRx2Up);
+                i3.putExtra("batteryPctCurrent", batteryPctCurrent);
+
+                i3.setType("text/plain");
                 startActivity(i3);
-                finish();
                 break;
             case R.id.Inscription:
                 Intent i4 = new Intent(MainMenuActivity.this, SignUpActivity.class);
                 startActivity(i4);
-                finish();
                 break;
         }
 

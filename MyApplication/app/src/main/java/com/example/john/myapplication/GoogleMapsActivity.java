@@ -97,11 +97,11 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private AlertDialog alert;
     private AlertDialog.Builder b;
     private final Context ctx = this;
-    private static IntentFilter ifilter;
     private static Intent batteryStatus;
     private static int batteryPctInitial;
     private static int batteryPctCurrent;
     private static int scale;
+    private static IntentFilter ifilter;
     private boolean gps_enabled;
     private boolean network_enabled;
     private static Place currentPlace;
@@ -150,7 +150,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         public void run() {
             try {
                 //mis à jour niveau de batterie
-                batteryStatus = ctx.registerReceiver(null, ifilter);
 
                 // Récupération de la localisation de l'utilisateur
                 Mylocation = getLastKnownLocation();
@@ -224,8 +223,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         countDownText = findViewById(R.id.countDownTimer);
         InfoText = findViewById(R.id.Info);
 
-        ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        batteryStatus = ctx.registerReceiver(null, ifilter);
 
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
