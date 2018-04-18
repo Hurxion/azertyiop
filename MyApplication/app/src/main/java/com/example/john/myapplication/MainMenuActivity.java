@@ -87,3 +87,32 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
 
     }
 }
+
+// TrafficStats ts = new TrafficStats();
+//long tStart = System.currentTimeMillis(); (Il faut conserver toujours ces trois variables)
+//long initialRx=ts.getMobileRxBytes();
+//long initialTx=ts.getMobileTxBytes();
+
+/*DownLINK
+*
+*   long tEnd = System.currentTimeMillis();
+    long tDelta = tEnd - tStart;
+    double elapsedSeconds = tDelta / 1000.0;
+*
+* long laterRx=ts.getMobileRxBytes(); //Après
+*
+* bandWidthRx= (laterRx-initialRx)/elapsedSeconds;
+*
+* */
+
+/*UpLINK
+*
+*   long tEnd = System.currentTimeMillis();
+    long tDelta = tEnd - tStart;
+    double elapsedSeconds = tDelta / 1000.0;
+*
+* long laterTx=ts.getMobileTxBytes(); //Après
+*
+* bandWidthRx= (laterTx-initialTx)/elapsedSeconds;
+*
+* */

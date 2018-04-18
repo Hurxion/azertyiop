@@ -41,10 +41,11 @@ public class TwoDevice2P_names extends AppCompatActivity {
     private static final int DISCOVERABLE_DURATION = 300;
     public static BluetoothDevice mBluetoothDevice = null;
     public static BluetoothSocket mBluetoothSocket = null;
-    ListeningThread t = null;
-    ConnectingThread ct = null;
+    public static ListeningThread t = null;
+    public static ConnectingThread ct = null;
     public static  Place currentPlace;
     public static Player currentPlayer;
+    public static Activity act_2p_names;
 
     private final static UUID uuid = UUID.fromString("fc5ffc49-00e3-4c8b-9cf1-6b72aad1001a");
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -52,7 +53,10 @@ public class TwoDevice2P_names extends AppCompatActivity {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                adapter.add(bluetoothDevice.getName() + "\n" + bluetoothDevice.getAddress());
+
+                if(bluetoothDevice.getName()!=null) {
+                    adapter.add(bluetoothDevice.getName() + "\n" + bluetoothDevice.getAddress());
+                }
             }
         }
     };
@@ -61,6 +65,7 @@ public class TwoDevice2P_names extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_two_device2_p_names);
+        act_2p_names=this;
         btn = (Button) findViewById(R.id.btn_find);
         name = (TextView) findViewById(R.id.myName);
         Intent i2 = getIntent();
@@ -146,8 +151,19 @@ public class TwoDevice2P_names extends AppCompatActivity {
             bluetoothAdapter.disable();
             adapter.clear();
             refreshEnabled = false;
-            btn.setText("Find Opponent");
         }
+    }
+
+    public static void stop(){
+        if (ct != null) {
+            ct.cancel();
+            ct = null;
+        }
+        if (t != null) {
+            t.cancel();
+            t = null;
+        }
+
     }
 
     protected void discoverDevices() {
@@ -176,6 +192,7 @@ public class TwoDevice2P_names extends AppCompatActivity {
         super.onPause();
         this.unregisterReceiver(broadcastReceiver);
     }
+
 
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
 

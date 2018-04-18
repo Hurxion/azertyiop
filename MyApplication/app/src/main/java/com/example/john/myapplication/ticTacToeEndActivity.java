@@ -12,12 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+
 
 public class ticTacToeEndActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -25,6 +21,7 @@ public class ticTacToeEndActivity extends AppCompatActivity implements View.OnCl
     private Player currentPlayer;
     private Place currentPlace;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int Finished_Activity = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +43,23 @@ public class ticTacToeEndActivity extends AppCompatActivity implements View.OnCl
 
         } else if(winner.equals("Player 1")) {
             currentPlayer.addToScore(currentPlace.nbPoint);
-            textResult.setText("Bravo " + currentPlayer.getName() + " vous avez gagné, vous obtenez " + currentPlace.nbPoint*2 + " points , votre score est maintenant de " + currentPlayer.getScore());
+            currentPlayer.addToScore(currentPlace.nbPoint);
+            textResult.setText("Bravo " + currentPlayer.getName() + " vous avez gagné, vous obtenez " + currentPlace.nbPoint*3 + " points , votre score est maintenant de " + currentPlayer.getScore());
 
         } else if(winner.equals("noWinner")){
-            textResult.setText("Dommage " + currentPlayer.getName() + " aucun joueur n'a gagné, vous obtenez quand même " + currentPlace.nbPoint + " points pour ta course, votre score est maintenant de " + currentPlayer.getScore());
+            currentPlayer.addToScore(currentPlace.nbPoint);
+            textResult.setText("Dommage " + currentPlayer.getName() + " aucun joueur n'a gagné, vous obtenez quand même " + currentPlace.nbPoint*2 + " points pour ta course, votre score est maintenant de " + currentPlayer.getScore());
         }
 
 
         photo.setOnClickListener(this);
-
+        try {
+            TwoDevice2P_names.mBluetoothSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        TwoDevice2P_names.act_2p_names.finishActivity(Finished_Activity);
+        TwoDevice2P_names.stop();
     }
 
 
